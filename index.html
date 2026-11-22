@@ -138,7 +138,7 @@
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
     gap: 14px;
   }
   .card {
@@ -175,9 +175,17 @@
     margin: 6px 0;
     color: #1e293b;
   }
-  .arabic-glyph { font-size: 2.5rem; font-family: "Noto Naskh Arabic", serif; }
+  .arabic-glyph { font-size: 2.35rem; font-family: "Noto Naskh Arabic", serif; }
   .title-text { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
-  .sub-text { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+  .sub-text {
+    font-size: 0.84rem;
+    color: var(--muted);
+    margin-top: 4px;
+    white-space: pre-line;
+    max-height: 96px;
+    overflow-y: auto;
+    text-align: center;
+  }
 
   .card-actions {
     display: flex;
@@ -228,89 +236,123 @@
   .p-pause { background: var(--warning); }
   .p-stop { background: var(--danger); }
 
-  /* Fullscreen Modal */
+  /* Fullscreen Popup Modal - Extra Large for Young Children */
   .modal-backdrop {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.88);
+    background: rgba(15, 23, 42, 0.94);
     z-index: 1000;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: 10px;
   }
   .modal-backdrop.open { display: flex; }
   .modal-card {
-    background: #fff;
+    background: #ffffff;
     color: var(--text);
-    width: 100%;
-    max-width: 580px;
-    border-radius: 24px;
-    padding: 28px 22px;
+    width: 98vw;
+    max-width: 1180px;
+    max-height: 95vh;
+    overflow-y: auto;
+    border-radius: 28px;
+    padding: 36px 28px;
     text-align: center;
     position: relative;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    box-shadow: 0 28px 70px rgba(0,0,0,0.55);
   }
   .close-modal {
     position: absolute;
-    top: 14px;
-    right: 16px;
+    top: 18px;
+    right: 20px;
     background: #f1f5f9;
     border: none;
     border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    font-size: 1.2rem;
-    font-weight: 700;
+    width: 46px;
+    height: 46px;
+    font-size: 1.45rem;
+    font-weight: 800;
     cursor: pointer;
   }
   .modal-glyph {
-    font-size: 4.5rem;
-    font-weight: 800;
+    font-size: clamp(4.8rem, 13vw, 9.5rem);
+    font-weight: 900;
     color: var(--primary);
-    line-height: 1.2;
+    line-height: 1.15;
+    margin-top: 6px;
+  }
+  .modal-glyph.arabic-mode {
+    font-family: "Noto Naskh Arabic", serif;
+    font-size: clamp(3.6rem, 8.5vw, 6.2rem);
   }
   .modal-example {
-    font-size: 1.25rem;
-    font-weight: 700;
     background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px;
-    margin: 16px 0;
+    border: 2px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 22px 20px;
+    margin: 22px 0;
+  }
+  .modal-headline {
+    font-size: clamp(2.1rem, 5.2vw, 3.8rem);
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.3;
+    display: block;
+  }
+  .modal-subline {
+    font-size: clamp(1.45rem, 3.4vw, 2.35rem);
+    font-weight: 700;
+    color: #334155;
+    line-height: 1.45;
+    display: block;
+    margin-top: 10px;
+  }
+  .modal-verses-box {
+    text-align: right;
+    direction: rtl;
+    background: #eff6ff;
+    border: 2px solid #93c5fd;
+    border-radius: 18px;
+    padding: 18px 20px;
+    margin-top: 14px;
+    font-family: "Noto Naskh Arabic", serif;
+    font-size: clamp(1.45rem, 3.2vw, 2.2rem);
+    line-height: 1.9;
+    color: #0f172a;
   }
   .modal-meaning {
-    font-size: 0.98rem;
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    font-weight: 600;
     color: var(--muted);
-    margin-bottom: 18px;
+    margin-bottom: 22px;
   }
   .own-voice-btn {
     display: block;
     width: 100%;
-    padding: 15px 18px;
-    font-size: 1.2rem;
+    padding: 18px 22px;
+    font-size: 1.35rem;
     font-weight: 800;
     border: none;
-    border-radius: 14px;
+    border-radius: 16px;
     background: var(--primary);
     color: #fff;
     cursor: pointer;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
   .voice-actions-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     justify-content: center;
     margin-top: 4px;
   }
   .change-voice-btn {
     display: inline-block;
-    padding: 7px 14px;
-    font-size: 0.82rem;
+    padding: 8px 15px;
+    font-size: 0.86rem;
     font-weight: 700;
     border: 1px solid #cbd5e1;
-    border-radius: 9px;
+    border-radius: 10px;
     background: #f1f5f9;
     color: #334155;
     cursor: pointer;
@@ -321,41 +363,11 @@
     border-color: var(--danger);
   }
   .rec-status {
-    margin-top: 8px;
-    font-size: 0.88rem;
+    margin-top: 10px;
+    font-size: 0.92rem;
     font-weight: 700;
     color: var(--danger);
-    min-height: 22px;
-  }
-
-  /* Parental Gate Modal */
-  .gate-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.72);
-    z-index: 1200;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
-  .gate-backdrop.open { display: flex; }
-  .gate-box {
-    background: #fff;
-    border-radius: 18px;
-    padding: 22px;
-    max-width: 360px;
-    width: 100%;
-    text-align: center;
-  }
-  .gate-box input {
-    width: 100%;
-    padding: 10px;
-    font-size: 1.1rem;
-    text-align: center;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    margin: 12px 0;
+    min-height: 24px;
   }
 </style>
 </head>
@@ -363,7 +375,7 @@
 
 <header>
   <h1>শিশুদের বাংলা, ইংরেজি, গণিত ও আরবি শিক্ষা অ্যাপ</h1>
-  <p>স্বরবর্ণ, ব্যঞ্জনবর্ণ, সংখ্যা, নামতা, ইংরেজি, আরবি হরফ ও কোরআনের সূরা — অভিভাবকের কণ্ঠে রেকর্ড ও প্লে করুন</p>
+  <p>স্বরবর্ণ, ব্যঞ্জনবর্ণ, সংখ্যা, নামতা, ইংরেজি, আরবি হরফ ও কোরআনের সূরা — সরাসরি ভয়েস পরিবর্তন ও প্লে করুন</p>
 </header>
 
 <div class="container">
@@ -420,7 +432,11 @@
   <div class="modal-card">
     <button class="close-modal" id="closeModalBtn" aria-label="বন্ধ করুন">✕</button>
     <div class="modal-glyph" id="modalGlyph">অ</div>
-    <div class="modal-example" id="modalExample">অ-তে অজগর, অজগরটি আসছে তেড়ে</div>
+    <div class="modal-example" id="modalExample">
+      <span class="modal-headline" id="modalHeadline">অ-তে অজগর</span>
+      <span class="modal-subline" id="modalSubline">অজগরটি আসছে তেড়ে</span>
+      <div class="modal-verses-box" id="modalVersesBox" style="display:none;"></div>
+    </div>
     <div class="modal-meaning" id="modalMeaning">স্বরবর্ণের প্রথম বর্ণ</div>
 
     <button class="own-voice-btn" id="modalPlayVoiceBtn">🔊 নিজের ভয়েস</button>
@@ -430,22 +446,6 @@
     </div>
     <input type="file" id="voiceFileInput" accept="audio/*" style="display:none;" />
     <div class="rec-status" id="recStatusText"></div>
-  </div>
-</div>
-
-<!-- Parental Gate Modal -->
-<div class="gate-backdrop" id="parentalGate" role="dialog" aria-modal="true">
-  <div class="gate-box">
-    <h3>অভিভাবক যাচাইকরণ</h3>
-    <p style="font-size:0.88rem;color:#475569;margin-top:6px;">
-      শিশুরা যাতে ভুলবশত ভয়েস পরিবর্তন করতে না পারে, তাই সঠিক যোগফল লিখুন:
-    </p>
-    <div id="mathQuestionText" style="font-size:1.3rem;font-weight:800;margin-top:10px;">৩ + ৪ = ?</div>
-    <input type="number" id="mathAnswerInput" placeholder="উত্তর লিখুন" />
-    <div style="display:flex;gap:8px;justify-content:center;">
-      <button class="p-btn p-play" id="confirmGateBtn">নিশ্চিত করুন</button>
-      <button class="p-btn p-stop" id="cancelGateBtn">বাতিল</button>
-    </div>
   </div>
 </div>
 
@@ -471,49 +471,82 @@
   }
 
   const SOROBORNO = [
-    { id: "soro-1", glyph: "অ", title: "স্বরে অ", example: "অ-তে অজগর, অজগরটি আসছে তেড়ে", meaning: "স্বরবর্ণের প্রথম বর্ণ", speakBn: "অ। অ-তে অজগর, অজগরটি আসছে তেড়ে।", lang: "bn-BD" },
-    { id: "soro-2", glyph: "আ", title: "স্বরে আ", example: "আ-তে আম, আমটি আমি খাব পেড়ে", meaning: "স্বরবর্ণের দ্বিতীয় বর্ণ", speakBn: "আ। আ-তে আম, আমটি আমি খাব পেড়ে।", lang: "bn-BD" },
-    { id: "soro-3", glyph: "ই", title: "হ্রস্ব ই", example: "ই-তে ইঁদুর, ইঁদুর ছানা ভয়ে মরে", meaning: "স্বরবর্ণের তৃতীয় বর্ণ", speakBn: "ই। ই-তে ইঁদুর, ইঁদুর ছানা ভয়ে মরে।", lang: "bn-BD" },
-    { id: "soro-4", glyph: "ঈ", title: "দীর্ঘ ঈ", example: "ঈ-তে ঈগল, ঈগল পাখি আকাশে ওড়ে", meaning: "স্বরবর্ণের চতুর্থ বর্ণ", speakBn: "ঈ। ঈ-তে ঈগল, ঈগল পাখি আকাশে ওড়ে।", lang: "bn-BD" },
-    { id: "soro-5", glyph: "উ", title: "হ্রস্ব উ", example: "উ-তে উট, উট চলেছে মরুর চরে", meaning: "স্বরবর্ণের পঞ্চম বর্ণ", speakBn: "উ। উ-তে উট, উট চলেছে মরুর চরে।", lang: "bn-BD" },
-    { id: "soro-6", glyph: "ঊ", title: "দীর্ঘ ঊ", example: "ঊ-তে ঊষা, ঊষার আলোয় ভোর নামে", meaning: "স্বরবর্ণের ষষ্ঠ বর্ণ", speakBn: "ঊ। ঊ-তে ঊষা, ঊষার আলোয় ভোর নামে।", lang: "bn-BD" },
-    { id: "soro-7", glyph: "ঋ", title: "ঋ", example: "ঋ-তে ঋষি, ঋষি বসেন ধ্যানের ঘরে", meaning: "স্বরবর্ণের সপ্তম বর্ণ", speakBn: "ঋ। ঋ-তে ঋষি, ঋষি বসেন ধ্যানের ঘরে।", lang: "bn-BD" },
-    { id: "soro-8", glyph: "এ", title: "এ", example: "এ-তে একতারা, একতারা বাজে সুরের তালে", meaning: "স্বরবর্ণের অষ্টম বর্ণ", speakBn: "এ। এ-তে একতারা, একতারা বাজে সুরের তালে।", lang: "bn-BD" },
-    { id: "soro-9", glyph: "ঐ", title: "ঐ", example: "ঐ-তে ঐরাবত, ঐরাবত চলে ধীরে ধীরে", meaning: "স্বরবর্ণের নবম বর্ণ", speakBn: "ঐ। ঐ-তে ঐরাবত, ঐরাবত চলে ধীরে ধীরে।", lang: "bn-BD" },
-    { id: "soro-10", glyph: "ও", title: "ও", example: "ও-তে ওল, ওল খেয়ো না ধরবে গলা", meaning: "স্বরবর্ণের দশম বর্ণ", speakBn: "ও। ও-তে ওল, ওল খেয়ো না ধরবে গলা।", lang: "bn-BD" },
-    { id: "soro-11", glyph: "ঔ", title: "ঔ", example: "ঔ-তে ঔষধ, ঔষধ খেলে রোগ সারে", meaning: "স্বরবর্ণের একাদশ বর্ণ", speakBn: "ঔ। ঔ-তে ঔষধ, ঔষধ খেলে রোগ সারে।", lang: "bn-BD" }
+    { id: "soro-1", glyph: "অ", title: "স্বরে অ", headline: "অ-তে অজগর", subline: "অজগরটি আসছে তেড়ে", example: "অ-তে অজগর
+অজগরটি আসছে তেড়ে", meaning: "স্বরবর্ণের প্রথম বর্ণ", speakText: "অ। অ-তে অজগর, অজগরটি আসছে তেড়ে।", lang: "bn-BD" },
+    { id: "soro-2", glyph: "আ", title: "স্বরে আ", headline: "আ-তে আম", subline: "আমটি আমি খাব পেড়ে", example: "আ-তে আম
+আমটি আমি খাব পেড়ে", meaning: "স্বরবর্ণের দ্বিতীয় বর্ণ", speakText: "আ। আ-তে আম, আমটি আমি খাব পেড়ে।", lang: "bn-BD" },
+    { id: "soro-3", glyph: "ই", title: "হ্রস্ব ই", headline: "ই-তে ইঁদুর", subline: "ইঁদুর ছানা ভয়ে মরে", example: "ই-তে ইঁদুর
+ইঁদুর ছানা ভয়ে মরে", meaning: "স্বরবর্ণের তৃতীয় বর্ণ", speakText: "ই। ই-তে ইঁদুর, ইঁদুর ছানা ভয়ে মরে।", lang: "bn-BD" },
+    { id: "soro-4", glyph: "ঈ", title: "দীর্ঘ ঈ", headline: "ঈ-তে ঈগল", subline: "ঈগল পাখি আকাশে ওড়ে", example: "ঈ-তে ঈগল
+ঈগল পাখি আকাশে ওড়ে", meaning: "স্বরবর্ণের চতুর্থ বর্ণ", speakText: "ঈ। ঈ-তে ঈগল, ঈগল পাখি আকাশে ওড়ে।", lang: "bn-BD" },
+    { id: "soro-5", glyph: "উ", title: "হ্রস্ব উ", headline: "উ-তে উট", subline: "উট চলেছে মরুর চরে", example: "উ-তে উট
+উট চলেছে মরুর চরে", meaning: "স্বরবর্ণের পঞ্চম বর্ণ", speakText: "উ। উ-তে উট, উট চলেছে মরুর চরে।", lang: "bn-BD" },
+    { id: "soro-6", glyph: "ঊ", title: "দীর্ঘ ঊ", headline: "ঊ-তে ঊষা", subline: "ঊষার আলোয় ভোর নামে", example: "ঊ-তে ঊষা
+ঊষার আলোয় ভোর নামে", meaning: "স্বরবর্ণের ষষ্ঠ বর্ণ", speakText: "ঊ। ঊ-তে ঊষা, ঊষার আলোয় ভোর নামে।", lang: "bn-BD" },
+    { id: "soro-7", glyph: "ঋ", title: "ঋ", headline: "ঋ-তে ঋষি", subline: "ঋষি বসেন ধ্যানের ঘরে", example: "ঋ-তে ঋষি
+ঋষি বসেন ধ্যানের ঘরে", meaning: "স্বরবর্ণের সপ্তম বর্ণ", speakText: "ঋ। ঋ-তে ঋষি, ঋষি বসেন ধ্যানের ঘরে।", lang: "bn-BD" },
+    { id: "soro-8", glyph: "এ", title: "এ", headline: "এ-তে একতারা", subline: "একতারা বাজে সুরের তালে", example: "এ-তে একতারা
+একতারা বাজে সুরের তালে", meaning: "স্বরবর্ণের অষ্টম বর্ণ", speakText: "এ। এ-তে একতারা, একতারা বাজে সুরের তালে।", lang: "bn-BD" },
+    { id: "soro-9", glyph: "ঐ", title: "ঐ", headline: "ঐ-তে ঐরাবত", subline: "ঐরাবত চলে ধীরে ধীরে", example: "ঐ-তে ঐরাবত
+ঐরাবত চলে ধীরে ধীরে", meaning: "স্বরবর্ণের নবম বর্ণ", speakText: "ঐ। ঐ-তে ঐরাবত, ঐরাবত চলে ধীরে ধীরে।", lang: "bn-BD" },
+    { id: "soro-10", glyph: "ও", title: "ও", headline: "ও-তে ওল", subline: "ওল খেয়ো না ধরবে গলা", example: "ও-তে ওল
+ওল খেয়ো না ধরবে গলা", meaning: "স্বরবর্ণের দশম বর্ণ", speakText: "ও। ও-তে ওল, ওল খেয়ো না ধরবে গলা।", lang: "bn-BD" },
+    { id: "soro-11", glyph: "ঔ", title: "ঔ", headline: "ঔ-তে ঔষধ", subline: "ঔষধ খেলে রোগ সারে", example: "ঔ-তে ঔষধ
+ঔষধ খেলে রোগ সারে", meaning: "স্বরবর্ণের একাদশ বর্ণ", speakText: "ঔ। ঔ-তে ঔষধ, ঔষধ খেলে রোগ সারে।", lang: "bn-BD" }
   ];
 
   const BANJONBORNO_RAW = [
-    ["ক","ক-তে কলম, কলম দিয়ে লিখি কথা"],["খ","খ-তে খাতা, খাতা ভরে আঁকি ছবি"],
-    ["গ","গ-তে গরু, গরু ঘাস খায় মাঠে"],["ঘ","ঘ-তে ঘোড়া, ঘোড়া ছোটে দ্রুত বেগে"],
-    ["ঙ","ঙ-তে ব্যাং, ব্যাং ডাকে বর্ষাকালে"],["চ","চ-তে চিতা, চিতা বাঘের তীক্ষ্ণ দৃষ্টি"],
-    ["ছ","ছ-তে ছাতা, রোদ-বৃষ্টিতে মাথায় দিই"],["জ","জ-তে জাহাজ, জাহাজ চলে সাগর জলে"],
-    ["ঝ","ঝ-তে ঝড়, ঝড় এলে গাছ দোলে"],["ঞ","ঞ-তে মিঞা, মিঞা সাহেব আসেন বাড়ি"],
-    ["ট","ট-তে টিয়া, টিয়া পাখির লাল ঠোঁট"],["ঠ","ঠ-তে ঠেলাগাড়ি, ঠেলাগাড়ি টানে মাঝি"],
-    ["ড","ড-তে ডাব, ডাবের পানি মিষ্টি ভারী"],["ঢ","ঢ-তে ঢোল, ঢোল বাজে উৎসবের দিনে"],
-    ["ণ","ণ-তে হরিণ, হরিণ ছোটে বনের মাঝে"],["ত","ত-তে তিমি, তিমি মাছের বিশাল দেহ"],
-    ["থ","থ-তে থালা, থালায় সাজাই খাবার আজ"],["দ","দ-তে দোয়েল, দোয়েল আমাদের জাতীয় পাখি"],
-    ["ধ","ধ-তে ধান, সোনালি ধানে ভরে মাঠ"],["ন","ন-তে নৌকা, নৌকা চলে নদীর জলে"],
-    ["প","প-তে পাখি, পাখি গান গায় সকালবেলা"],["ফ","ফ-তে ফুল, ফুলের সুবাস চারিদিকে"],
-    ["ব","ব-তে বই, বই পড়ে জ্ঞান বাড়াই"],["ভ","ভ-তে ভালুক, ভালুক থাকে পাহাড় বনে"],
-    ["ম","ম-তে মা, মা আমাদের ভালোবাসেন"],["য","য-তে যাঁতা, যাঁতা ঘোরে আপন মনে"],
-    ["র","র-তে রাজা, রাজার আছে সোনার মুকুট"],["ল","ল-তে লেবু, লেবুর রসে ভিটামিন সি"],
-    ["শ","শ-তে শাপলা, শাপলা আমাদের জাতীয় ফুল"],["ষ","ষ-তে ষাঁড়, ষাঁড় চলে হাল টেনে"],
-    ["স","স-তে সিংহ, সিংহ বনের রাজা"],["হ","হ-তে হাতি, হাতির শুঁড় লম্বা বেশ"],
-    ["ড়","ড়-তে গাড়ি, গাড়ি চলে রাজপথে"],["ঢ়","ঢ়-তে আষাঢ়, আষাঢ় মাসে নামে বৃষ্টি"],
-    ["য়","য়-তে পায়রা, পায়রা ওড়ে আকাশপানে"],["ৎ","ৎ-তে উৎসব, আনন্দে মেতে উঠি সবাই"],
-    ["ং","ং-তে অনুস্বার, শব্দের শেষে বসে"],["ঃ","ঃ-তে বিসর্গ, শব্দে যোগ করে ধ্বনি"],
-    ["ঁ","ঁ-তে চন্দ্রবিন্দু, চাঁদের মতো হাসি মাখে"]
+    ["ক","ক-তে কলম","কলম দিয়ে লিখি কথা"],
+    ["খ","খ-তে খাতা","খাতা ভরে আঁকি ছবি"],
+    ["গ","গ-তে গরু","গরু ঘাস খায় মাঠে"],
+    ["ঘ","ঘ-তে ঘোড়া","ঘোড়া ছোটে দ্রুত বেগে"],
+    ["ঙ","ঙ-তে ব্যাং","ব্যাং ডাকে বর্ষাকালে"],
+    ["চ","চ-তে চিতা","চিতা বাঘের তীক্ষ্ণ দৃষ্টি"],
+    ["ছ","ছ-তে ছাতা","রোদ-বৃষ্টিতে মাথায় দিই"],
+    ["জ","জ-তে জাহাজ","জাহাজ চলে সাগর জলে"],
+    ["ঝ","ঝ-তে ঝড়","ঝড় এলে গাছ দোলে"],
+    ["ঞ","ঞ-তে মিঞা","মিঞা সাহেব আসেন বাড়ি"],
+    ["ট","ট-তে টিয়া","টিয়া পাখির লাল ঠোঁট"],
+    ["ঠ","ঠ-তে ঠেলাগাড়ি","ঠেলাগাড়ি টানে মাঝি"],
+    ["ড","ড-তে ডাব","ডাবের পানি মিষ্টি ভারী"],
+    ["ঢ","ঢ-তে ঢোল","ঢোল বাজে উৎসবের দিনে"],
+    ["ণ","ণ-তে হরিণ","হরিণ ছোটে বনের মাঝে"],
+    ["ত","ত-তে তিমি","তিমি মাছের বিশাল দেহ"],
+    ["থ","থ-তে থালা","থালায় সাজাই খাবার আজ"],
+    ["দ","দ-তে দোয়েল","দোয়েল আমাদের জাতীয় পাখি"],
+    ["ধ","ধ-তে ধান","সোনালি ধানে ভরে মাঠ"],
+    ["ন","ন-তে নৌকা","নৌকা চলে নদীর জলে"],
+    ["প","প-তে পাখি","পাখি গান গায় সকালবেলা"],
+    ["ফ","ফ-তে ফুল","ফুলের সুবাস চারিদিকে"],
+    ["ব","ব-তে বই","বই পড়ে জ্ঞান বাড়াই"],
+    ["ভ","ভ-তে ভালুক","ভালুক থাকে পাহাড় বনে"],
+    ["ম","ম-তে মা","মা আমাদের ভালোবাসেন"],
+    ["য","য-তে যাঁতা","যাঁতা ঘোরে আপন মনে"],
+    ["র","র-তে রাজা","রাজার আছে সোনার মুকুট"],
+    ["ল","ল-তে লেবু","লেবুর রসে ভিটামিন সি"],
+    ["শ","শ-তে শাপলা","শাপলা আমাদের জাতীয় ফুল"],
+    ["ষ","ষ-তে ষাঁড়","ষাঁড় চলে হাল টেনে"],
+    ["স","স-তে সিংহ","সিংহ বনের রাজা"],
+    ["হ","হ-তে হাতি","হাতির শুঁড় লম্বা বেশ"],
+    ["ড়","ড়-তে গাড়ি","গাড়ি চলে রাজপথে"],
+    ["ঢ়","ঢ়-তে আষাঢ়","আষাঢ় মাসে নামে বৃষ্টি"],
+    ["য়","য়-তে পায়রা","পায়রা ওড়ে আকাশপানে"],
+    ["ৎ","ৎ-তে উৎসব","আনন্দে মেতে উঠি সবাই"],
+    ["ং","ং-তে অনুস্বার","শব্দের শেষে বসে"],
+    ["ঃ","ঃ-তে বিসর্গ","শব্দে যোগ করে ধ্বনি"],
+    ["ঁ","ঁ-তে চন্দ্রবিন্দু","চাঁদের মতো হাসি মাখে"]
   ];
 
-  const BANJONBORNO = BANJONBORNO_RAW.map(([g, ex], i) => ({
+  const BANJONBORNO = BANJONBORNO_RAW.map(([g, h, s], i) => ({
     id: `banjo-${i+1}`,
     glyph: g,
     title: `ব্যঞ্জনবর্ণ '${g}'`,
-    example: ex,
+    headline: h,
+    subline: s,
+    example: `${h}
+${s}`,
     meaning: `ব্যঞ্জনবর্ণের ${toBnNum(i+1)}তম বর্ণ`,
-    speakBn: `${g}। ${ex}।`,
+    speakText: `${g}। ${h}। ${s}।`,
     lang: "bn-BD"
   }));
 
@@ -521,14 +554,18 @@
   for (let n = 1; n <= 100; n++) {
     const bnN = toBnNum(n);
     const bnW = BN_WORDS[n] || bnN;
+    const h = `সংখ্যা ${bnN} (${bnW})`;
+    const s = `ইংরেজিতে ${n}`;
     NUMBERS.push({
       id: `num-${n}`,
       glyph: `${bnN} / ${n}`,
       title: `সংখ্যা ${bnN} (${n})`,
-      example: `বাংলায় ${bnN} (${bnW}) এবং ইংরেজিতে ${n}`,
+      headline: h,
+      subline: s,
+      example: `${h}
+${s}`,
       meaning: "গাণিতিক সংখ্যা (বাংলা ও ইংরেজি)",
-      speakBn: `${bnN}, ${bnW}। ইংরেজিতে ${n}।`,
-      speakEn: `${n}`,
+      speakText: `${bnW}। ইংরেজিতে ${n}।`,
       lang: "bn-BD"
     });
   }
@@ -540,14 +577,19 @@
       const bT = toBnNum(table);
       const bM = toBnNum(mul);
       const bP = toBnNum(prod);
+      const h = `${bT} × ${bM} = ${bP}`;
+      const s = `${BN_WORDS[table] || bT} গুণ ${BN_WORDS[mul] || bM} সমান ${BN_WORDS[prod] || bP}`;
       NAMTA.push({
         id: `namta-${table}-${mul}`,
         table,
-        glyph: `${bT} × ${bM} = ${bP}`,
+        glyph: h,
         title: `${bT}-এর নামতা (${table} × ${mul} = ${prod})`,
-        example: `${BN_WORDS[table] || bT} গুণ ${BN_WORDS[mul] || bM} সমান ${BN_WORDS[prod] || bP}`,
+        headline: h,
+        subline: s,
+        example: `${h}
+${s}`,
         meaning: `${bT}-এর ঘরের নামতা`,
-        speakBn: `${BN_WORDS[table] || bT} গুণ ${BN_WORDS[mul] || bM} সমান ${BN_WORDS[prod] || bP}।`,
+        speakText: s,
         lang: "bn-BD"
       });
     }
@@ -562,140 +604,276 @@
     id: `eng-${idx+1}`,
     glyph: `${ch} ${ch.toLowerCase()}`,
     title: `Letter ${ch}`,
-    example: `${ch} for ${word}`,
+    headline: `${ch} for ${word}`,
+    subline: `Capital ${ch} & Small ${ch.toLowerCase()}`,
+    example: `${ch} for ${word}
+${ch.toLowerCase()}`,
     meaning: `ইংরেজি বর্ণমালার ${toBnNum(idx+1)}তম অক্ষর`,
-    speakEn: `${ch} for ${word}.`,
-    speakBn: `${ch} ফর ${word}`,
+    speakText: `${ch} for ${word}.`,
     lang: "en-US"
   }));
 
   const ARABIC_LETTERS = [
     ["ا","আলিফ"],["ب","বা"],["ت","তা"],["ث","ছা"],["ج","জিম"],["ح","হা"],["خ","খ"],
-    ["د","দাল"],["ذ","যাল"],["ر","রা"],["ز","যা"],["س","সিন"],["ش","শিন"],["ص","সোয়াদ"],
+    ["د","দাল"],["ذ","যাল"],["র","রা"],["ز","যা"],["س","সিন"],["ش","শিন"],["ص","সোয়াদ"],
     ["ض","দোয়াদ"],["ط","ত্বা"],["ظ","যোয়া"],["ع","আইন"],["غ","গাইন"],["ف","ফা"],
-    ["ق","ক্বাফ"],["ك","কাফ"],["ل","লাম"],["م","মিম"],["ن","নুন"],["و","ওয়াও"],["ه","হা"],
+    ["ق","ক্বাফ"],["ك","কাফ"],["ল","লাম"],["ম","মিম"],["ন","নুন"],["و","ওয়াও"],["ه","হা"],
     ["ء","হামজা"],["ي","ইয়া"]
   ];
   const ARABIC = ARABIC_LETTERS.map(([g, name], i) => ({
     id: `arb-${i+1}`,
     glyph: g,
     title: `আরবি হরফ: ${name}`,
-    example: `হরফ '${g}' — উচ্চারণ: ${name}`,
+    headline: `হরফ ${g}`,
+    subline: `উচ্চারণ: ${name}`,
+    example: `হরফ ${g}
+উচ্চারণ: ${name}`,
     meaning: `আরবি বর্ণমালার ${toBnNum(i+1)}তম হরফ`,
-    speakAr: name,
-    speakBn: `আরবি হরফ ${name}`,
+    speakText: g,
     lang: "ar-SA"
   }));
 
   const SURAHS = [
     {
       id: "surah-1",
-      glyph: "الْفَاتِحَة",
-      title: "সূরা আল-ফাতিহা (১)",
-      example: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
-      meaning: "সব প্রশংসা মহান আল্লাহর যিনি সমগ্র বিশ্বজগতের প্রতিপালক (মোট ৭ আয়াত)",
-      speakAr: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ الرَّحْمَٰنِ الرَّحِيمِ مَالِكِ يَوْمِ الدِّينِ",
-      speakBn: "সূরা আল-ফাতিহা। আলহামদুলিল্লাহি রাব্বিল আলামিন।",
+      glyph: "سُورَةُ الْفَاتِحَة",
+      title: "সূরা আল-ফাতিহা (১ — পূর্ণ ৭ আয়াত)",
+      headline: "সূরা আল-ফাতিহা (১–৭ আয়াত)",
+      subline: "কোরআনের প্রথম সূরা — সম্পূর্ণ ৭টি আয়াত নিচে দেওয়া হলো",
+      verses: [
+        "١. بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+        "٢. الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+        "٣. الرَّحْمَٰنِ الرَّحِيمِ",
+        "٤. مَالِكِ يَوْمِ الدِّينِ",
+        "٥. إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+        "٦. اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+        "٧. صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"
+      ],
+      example: "١. بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+٢. الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ
+٣. الرَّحْمَٰنِ الرَّحِيمِ
+٤. مَالِكِ يَوْمِ الدِّينِ
+٥. إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ
+٦. اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ
+٧. صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
+      meaning: "সব প্রশংসা মহান আল্লাহর যিনি সমগ্র বিশ্বজগতের প্রতিপালক (সম্পূর্ণ ৭ আয়াত)",
+      speakText: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ الرَّحْمَٰنِ الرَّحِيمِ مَالِكِ يَوْمِ الدِّينِ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
       lang: "ar-SA"
     },
     {
       id: "surah-105",
-      glyph: "الْفِيلِ",
-      title: "সূরা আল-ফীল (১০৫)",
-      example: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ",
+      glyph: "سُورَةُ الْفِيلِ",
+      title: "সূরা আল-ফীল (১০৫ — ৫ আয়াত)",
+      headline: "সূরা আল-ফীল (১–৫ আয়াত)",
+      subline: "হস্তীওয়ালাদের ঘটনা — সম্পূর্ণ ৫টি আয়াত",
+      verses: [
+        "١. أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ",
+        "٢. أَلَمْ يَجْعَلْ كَيْدَهُمْ فِي تَضْلِيلٍ",
+        "٣. وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ",
+        "٤. تَرْمِيهِمْ بِحِجَارَةٍ مِنْ سِجِّيلٍ",
+        "٥. فَجَعَلَهُمْ كَعَصْفٍ مَأْكُولٍ"
+      ],
+      example: "١. أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ
+٢. أَلَمْ يَجْعَلْ كَيْدَهُمْ فِي تَضْلِيلٍ
+٣. وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ
+٤. تَرْمِيهِمْ بِحِجَارَةٍ مِنْ سِجِّيلٍ
+٥. فَجَعَلَهُمْ كَعَصْفٍ مَأْكُولٍ",
       meaning: "আপনি কি দেখেননি আপনার প্রতিপালক হস্তীওয়ালাদের সাথে কী করেছিলেন?",
-      speakAr: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ",
-      speakBn: "সূরা আল-ফীল। আলাম তারা কাইফা ফাআলা রব্বুকা বিআসহাবিল ফিল।",
+      speakText: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ أَلَمْ يَجْعَلْ كَيْدَهُمْ فِي تَضْلِيلٍ وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ تَرْمِيهِمْ بِحِجَارَةٍ مِنْ سِجِّيلٍ فَجَعَلَهُمْ كَعَصْفٍ مَأْكُولٍ",
       lang: "ar-SA"
     },
     {
       id: "surah-106",
-      glyph: "قُرَيْشٍ",
-      title: "সূরা কুরাইশ (১০৬)",
-      example: "لِإِيلَافِ قُرَيْشٍ — فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ",
+      glyph: "سُورَةُ قُرَيْشٍ",
+      title: "সূরা কুরাইশ (১০৬ — ৪ আয়াত)",
+      headline: "সূরা কুরাইশ (১–৪ আয়াত)",
+      subline: "কুরাইশের নিরাপত্তা ও ইবাদত — সম্পূর্ণ ৪টি আয়াত",
+      verses: [
+        "١. لِإِيلَافِ قُرَيْشٍ",
+        "٢. إِيلَافِهِمْ رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ",
+        "٣. فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ",
+        "٤. الَّذِي أَطْعَمَهُمْ مِنْ جُوعٍ وَآمَنَهُمْ مِنْ خَوْفٍ"
+      ],
+      example: "١. لِإِيلَافِ قُرَيْشٍ
+٢. إِيلَافِهِمْ رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ
+٣. فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ
+٤. الَّذِي أَطْعَمَهُمْ مِنْ جُوعٍ وَآمَنَهُمْ مِنْ خَوْفٍ",
       meaning: "কুরাইশের আসক্তির কারণে; তারা এই ঘরের প্রভুর ইবাদত করুক",
-      speakAr: "لِإِيلَافِ قُرَيْشٍ إِيلَافِهِمْ رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ",
-      speakBn: "সূরা কুরাইশ। লিইলাফি কুরাইশ।",
+      speakText: "لِإِيلَافِ قُرَيْشٍ إِيلَافِهِمْ رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ الَّذِي أَطْعَمَهُمْ مِنْ جُوعٍ وَآمَنَهُمْ مِنْ خَوْفٍ",
       lang: "ar-SA"
     },
     {
       id: "surah-107",
-      glyph: "الْمَاعُونَ",
-      title: "সূরা আল-মাউন (১০৭)",
-      example: "أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ",
+      glyph: "سُورَةُ الْمَاعُونَ",
+      title: "সূরা আল-মাউন (১০৭ — ৭ আয়াত)",
+      headline: "সূরা আল-মাউন (১–৭ আয়াত)",
+      subline: "কর্মফল দিবস ও দানশীলতা — সম্পূর্ণ ৭টি আয়াত",
+      verses: [
+        "١. أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ",
+        "٢. فَذَٰلِكَ الَّذِي يَدُعُّ الْيَتِيمَ",
+        "٣. وَلَا يَحُضُّ عَلَىٰ طَعَامِ الْمِسْكِينِ",
+        "٤. فَوَيْلٌ لِلْمُصَلِّينَ",
+        "٥. الَّذِينَ هُمْ عَنْ صَلَاتِهِمْ سَاهُونَ",
+        "٦. الَّذِينَ هُمْ يُرَاءُونَ",
+        "٧. وَيَمْنَعُونَ الْمَاعُونَ"
+      ],
+      example: "١. أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ
+٢. فَذَٰلِكَ الَّذِي يَدُعُّ الْيَتِيمَ
+٣. وَلَا يَحُضُّ عَلَىٰ طَعَامِ الْمِسْكِينِ
+٤. فَوَيْلٌ لِلْمُصَلِّينَ
+٥. الَّذِينَ هُمْ عَنْ صَلَاتِهِمْ سَاهُونَ
+٦. الَّذِينَ هُمْ يُرَاءُونَ
+٧. وَيَمْنَعُونَ الْمَاعُونَ",
       meaning: "আপনি কি তাকে দেখেছেন যে কর্মফল দিবসকে অস্বীকার করে?",
-      speakAr: "أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ",
-      speakBn: "সূরা আল-মাউন। আরাআইতাল্লাযি ইউকাযযিবু বিদ্দিন।",
+      speakText: "أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ فَذَٰلِكَ الَّذِي يَدُعُّ الْيَتِيمَ وَلَا يَحُضُّ عَلَىٰ طَعَامِ الْمِسْكِينِ فَوَيْلٌ لِلْمُصَلِّينَ الَّذِينَ هُمْ عَنْ صَلَاتِهِمْ سَاهُونَ الَّذِينَ هُمْ يُرَاءُونَ وَيَمْنَعُونَ الْمَاعُونَ",
       lang: "ar-SA"
     },
     {
       id: "surah-108",
-      glyph: "الْكَوْثَرِ",
-      title: "সূরা আল-কাওসার (১০৮)",
-      example: "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
+      glyph: "سُورَةُ الْكَوْثَرِ",
+      title: "সূরা আল-কাওসার (১০৮ — ৩ আয়াত)",
+      headline: "সূরা আল-কাওসার (১–৩ আয়াত)",
+      subline: "কাওসারের নেয়ামত ও সালাত — সম্পূর্ণ ৩টি আয়াত",
+      verses: [
+        "١. إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
+        "٢. فَصَلِّ لِرَبِّكَ وَانْحَرْ",
+        "٣. إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ"
+      ],
+      example: "١. إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ
+٢. فَصَلِّ لِرَبِّكَ وَانْحَرْ
+٣. إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ",
       meaning: "নিশ্চয়ই আমি আপনাকে আল-কাওসার দান করেছি",
-      speakAr: "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ فَصَلِّ لِرَبِّكَ وَانْحَرْ",
-      speakBn: "সূরা আল-কাওসার। ইন্না আত্বাইনাকাল কাওসার।",
+      speakText: "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ فَصَلِّ لِرَبِّكَ وَانْحَرْ إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ",
       lang: "ar-SA"
     },
     {
       id: "surah-109",
-      glyph: "الْكَافِرُونَ",
-      title: "সূরা আল-কাফিরুন (১০৯)",
-      example: "قُلْ يَا أَيُّهَا الْكَافِرُونَ",
+      glyph: "سُورَةُ الْكَافِرُونَ",
+      title: "সূরা আল-কাফিরুন (১০৯ — ৬ আয়াত)",
+      headline: "সূরা আল-কাফিরুন (১–৬ আয়াত)",
+      subline: "তাওহিদের ঘোষণা — সম্পূর্ণ ৬টি আয়াত",
+      verses: [
+        "١. قُلْ يَا أَيُّهَا الْكَافِرُونَ",
+        "٢. لَا أَعْبُدُ مَا تَعْبُدُونَ",
+        "٣. وَلَا أَنْتُمْ عَابِدُونَ مَا أَعْبُدُ",
+        "٤. وَلَا أَنَا عَابِدٌ مَا عَبَدْتُمْ",
+        "٥. وَلَا أَنْتُمْ عَابِدُونَ مَا أَعْبُدُ",
+        "٦. لَكُمْ دِينُكُمْ وَلِيَ دِينِ"
+      ],
+      example: "١. قُلْ يَا أَيُّهَا الْكَافِرُونَ
+٢. لَا أَعْبُدُ مَا تَعْبُدُونَ
+٣. وَلَا أَنْتُمْ عَابِدُونَ مَا أَعْبُدُ
+٤. وَلَا أَنَا عَابِدٌ مَا عَبَدْتُمْ
+٥. وَلَا أَنْتُمْ عَابِدُونَ مَا أَعْبُدُ
+٦. لَكُمْ دِينُكُمْ وَلِيَ دِينِ",
       meaning: "বলুন, হে কাফিরগণ! আমি তাদের ইবাদত করি না যাদের তোমরা করো",
-      speakAr: "قُلْ يَا أَيُّهَا الْكَافِرُونَ لَا أَعْبُدُ مَا تَعْبُدُونَ",
-      speakBn: "সূরা আল-কাফিরুন। কুল ইয়া আইয়ুহাল কাফিরুন।",
+      speakText: "قُلْ يَا أَيُّهَا الْكَافِرُونَ لَا أَعْبُدُ مَا تَعْبُدُونَ وَلَا أَنْتُمْ عَابِدُونَ مَا أَعْبُدُ وَلَا أَنَا عَابِدٌ مَا عَبَدْتُمْ وَلَا أَنْتُمْ عَابِدُونَ مَا أَعْبُدُ لَكُمْ دِينُكُمْ وَلِيَ دِينِ",
       lang: "ar-SA"
     },
     {
       id: "surah-110",
-      glyph: "النَّصْرِ",
-      title: "সূরা আন-নাসর (১১০)",
-      example: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
+      glyph: "سُورَةُ النَّصْرِ",
+      title: "সূরা আন-নাসর (১১০ — ৩ আয়াত)",
+      headline: "সূরা আন-নাসর (১–৩ আয়াত)",
+      subline: "আল্লাহর সাহায্য ও তাসবিহ — সম্পূর্ণ ৩টি আয়াত",
+      verses: [
+        "١. إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
+        "٢. وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا",
+        "٣. فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ ۚ إِنَّهُ كَانَ تَوَّابًا"
+      ],
+      example: "١. إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ
+٢. وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا
+٣. فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ ۚ إِنَّهُ كَانَ تَوَّابًا",
       meaning: "যখন আল্লাহর সাহায্য ও বিজয় আসবে",
-      speakAr: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
-      speakBn: "সূরা আন-নাসর। ইযা জাআ নাসরুল্লাহি ওয়াল ফাতহ।",
+      speakText: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ إِنَّهُ كَانَ تَوَّابًا",
       lang: "ar-SA"
     },
     {
       id: "surah-111",
-      glyph: "الْمَسَدِ",
-      title: "সূরা আল-মাসাদ (১১১)",
-      example: "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ",
+      glyph: "سُورَةُ الْمَسَدِ",
+      title: "সূরা আল-মাসাদ (১১১ — ৫ আয়াত)",
+      headline: "সূরা আল-মাসাদ (১–৫ আয়াত)",
+      subline: "আবু লাহাবের পরিণতি — সম্পূর্ণ ৫টি আয়াত",
+      verses: [
+        "١. تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ",
+        "٢. مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ",
+        "٣. سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ",
+        "٤. وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ",
+        "٥. فِي جِيدِهَا حَبْلٌ مِنْ مَسَدٍ"
+      ],
+      example: "١. تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ
+٢. مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ
+٣. سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ
+٤. وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ
+٥. فِي جِيدِهَا حَبْلٌ مِنْ مَسَدٍ",
       meaning: "আবু লাহাবের উভয় হাত ধ্বংস হোক এবং সে নিজেও ধ্বংস হোক",
-      speakAr: "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ",
-      speakBn: "সূরা আল-মাসাদ। তাব্বাত ইয়াদা আবি লাহাবিওঁ ওয়া তাব্ব।",
+      speakText: "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ فِي جِيدِهَا حَبْلٌ مِنْ مَسَدٍ",
       lang: "ar-SA"
     },
     {
       id: "surah-112",
-      glyph: "الْإِخْلَاصِ",
-      title: "সূরা আল-ইখলাস (১১২)",
-      example: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+      glyph: "سُورَةُ الْإِخْلَاصِ",
+      title: "সূরা আল-ইখলাস (১১২ — ৪ আয়াত)",
+      headline: "সূরা আল-ইখলাস (১–৪ আয়াত)",
+      subline: "আল্লাহর একত্ববাদ — সম্পূর্ণ ৪টি আয়াত",
+      verses: [
+        "١. قُلْ هُوَ اللَّهُ أَحَدٌ",
+        "٢. اللَّهُ الصَّمَدُ",
+        "٣. لَمْ يَلِدْ وَلَمْ يُولَدْ",
+        "٤. وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ"
+      ],
+      example: "١. قُلْ هُوَ اللَّهُ أَحَدٌ
+٢. اللَّهُ الصَّمَدُ
+٣. لَمْ يَلِدْ وَلَمْ يُولَدْ
+٤. وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ",
       meaning: "বলুন, তিনি আল্লাহ, এক ও অদ্বিতীয়",
-      speakAr: "قُلْ هُوَ اللَّهُ أَحَدٌ اللَّهُ الصَّمَدُ",
-      speakBn: "সূরা আল-ইখলাস। কুল হুয়াল্লাহু আহাদ।",
+      speakText: "قُلْ هُوَ اللَّهُ أَحَدٌ اللَّهُ الصَّمَدُ لَمْ يَلِدْ وَلَمْ يُولَدْ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ",
       lang: "ar-SA"
     },
     {
       id: "surah-113",
-      glyph: "الْفَلَقِ",
-      title: "সূরা আল-ফালাক (১১৩)",
-      example: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
+      glyph: "سُورَةُ الْفَلَقِ",
+      title: "সূরা আল-ফালাক (১১৩ — ৫ আয়াত)",
+      headline: "সূরা আল-ফালাক (১–৫ আয়াত)",
+      subline: "ভোরের প্রভুর কাছে আশ্রয় — সম্পূর্ণ ৫টি আয়াত",
+      verses: [
+        "١. قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
+        "٢. مِنْ شَرِّ مَا خَلَقَ",
+        "٣. وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ",
+        "٤. وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ",
+        "٥. وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ"
+      ],
+      example: "١. قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ
+٢. مِنْ شَرِّ مَا خَلَقَ
+٣. وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ
+٤. وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ
+٥. وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ",
       meaning: "বলুন, আমি আশ্রয় নিচ্ছি ভোরের প্রভুর কাছে",
-      speakAr: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
-      speakBn: "সূরা আল-ফালাক। কুল আউযু বিরাব্বিল ফালাক।",
+      speakText: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ مِنْ شَرِّ مَا خَلَقَ وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ",
       lang: "ar-SA"
     },
     {
       id: "surah-114",
-      glyph: "النَّاسِ",
-      title: "সূরা আন-নাস (১১৪)",
-      example: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+      glyph: "سُورَةُ النَّاسِ",
+      title: "সূরা আন-নাস (১১৪ — ৬ আয়াত)",
+      headline: "সূরা আন-নাস (১–৬ আয়াত)",
+      subline: "মানুষের প্রভুর কাছে আশ্রয় — সম্পূর্ণ ৬টি আয়াত",
+      verses: [
+        "١. قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+        "٢. مَلِكِ النَّاسِ",
+        "٣. إِلَٰهِ النَّاسِ",
+        "٤. مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ",
+        "٥. الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ",
+        "٦. مِنَ الْجِنَّةِ وَالنَّاسِ"
+      ],
+      example: "١. قُلْ أَعُوذُ بِرَبِّ النَّاسِ
+٢. مَلِكِ النَّاسِ
+٣. إِلَٰهِ النَّاسِ
+٤. مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ
+٥. الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ
+٦. مِنَ الْجِنَّةِ وَالنَّاسِ",
       meaning: "বলুন, আমি আশ্রয় নিচ্ছি মানুষের প্রভুর কাছে",
-      speakAr: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
-      speakBn: "সূরা আন-নাস। কুল আউযু বিরাব্বিন নাস।",
+      speakText: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ مَلِكِ النَّاسِ إِلَٰهِ النَّاسِ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ مِنَ الْجِنَّةِ وَالنَّاسِ",
       lang: "ar-SA"
     }
   ];
@@ -715,7 +893,7 @@
   const STORE_NAME = "customVoices";
   const LS_PREFIX = "kids_custom_voice_b64_";
   let db = null;
-  const customVoiceCache = new Map(); // id -> Blob
+  const customVoiceCache = new Map();
 
   function blobToDataUrl(blob) {
     return new Promise((resolve, reject) => {
@@ -846,81 +1024,67 @@
     });
   }
 
-  // ---------------- AUDIO & SPEECH ENGINE ----------------
-  let audioCtx = null;
+  // ---------------- NATIVE LANGUAGE VOICE ENGINE (BN / EN / AR) ----------------
   let activeAudioEl = null;
   let playbackToken = 0;
   let isPlayingQueue = false;
   let isPausedQueue = false;
   let queueItems = [];
   let queueIndex = 0;
+  let cachedVoices = [];
 
-  function ensureAudioContext() {
-    const Ctx = window.AudioContext || window.webkitAudioContext;
-    if (Ctx && !audioCtx) {
-      audioCtx = new Ctx();
-    }
-    if (audioCtx && audioCtx.state === "suspended") {
-      audioCtx.resume().catch(() => {});
+  function refreshVoices() {
+    if ("speechSynthesis" in window && window.speechSynthesis.getVoices) {
+      cachedVoices = window.speechSynthesis.getVoices() || [];
     }
   }
 
-  function playGentleChime(durationSec = 0.35) {
-    return new Promise((resolve) => {
-      try {
-        ensureAudioContext();
-        if (!audioCtx) return resolve();
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(523.25, now);
-        osc.frequency.exponentialRampToValueAtTime(659.25, now + durationSec * 0.6);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + durationSec);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + durationSec + 0.02);
-        setTimeout(resolve, durationSec * 1000 + 40);
-      } catch {
-        resolve();
-      }
-    });
+  if ("speechSynthesis" in window) {
+    refreshVoices();
+    window.speechSynthesis.onvoiceschanged = refreshVoices;
   }
 
-  function speakTextWithTTS(text, lang = "bn-BD", timeoutMs = 4500) {
+  function pickBestNativeVoice(langCode) {
+    if (!cachedVoices.length) refreshVoices();
+    const prefix = (langCode || "bn-BD").split("-")[0].toLowerCase();
+    const exact = cachedVoices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase());
+    if (exact) return exact;
+    const langMatch = cachedVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix));
+    if (langMatch) return langMatch;
+    return null;
+  }
+
+  function speakNativeContinuous(text, lang = "bn-BD", timeoutMs = 8500) {
     return new Promise((resolve) => {
       if (!("speechSynthesis" in window)) {
-        playGentleChime(0.45).then(resolve);
+        resolve();
         return;
       }
       try {
         window.speechSynthesis.cancel();
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = lang;
-        utter.rate = 0.92;
-        utter.pitch = 1.05;
-
-        const voices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
-        const matched = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(lang.split("-")[0].toLowerCase()));
-        if (matched) utter.voice = matched;
+        const chosenVoice = pickBestNativeVoice(lang);
+        if (chosenVoice) {
+          utter.voice = chosenVoice;
+        }
+        utter.rate = lang.startsWith("ar") ? 0.85 : 0.9;
+        utter.pitch = 1.0;
 
         let settled = false;
-        const finish = () => {
+        const done = () => {
           if (!settled) {
             settled = true;
             clearTimeout(timer);
             resolve();
           }
         };
-
-        const timer = setTimeout(finish, timeoutMs);
-        utter.onend = finish;
-        utter.onerror = finish;
+        const timer = setTimeout(done, timeoutMs);
+        utter.onend = done;
+        utter.onerror = done;
         window.speechSynthesis.speak(utter);
       } catch {
-        playGentleChime(0.45).then(resolve);
+        resolve();
       }
     });
   }
@@ -972,17 +1136,12 @@
     highlightCard(item.id);
     if (customVoiceCache.has(item.id)) {
       await playBlobAudio(customVoiceCache.get(item.id));
-      if (token !== playbackToken) return;
-      await playGentleChime(0.15);
       return;
     }
-
-    const textToSpeak = item.speakBn || item.speakAr || item.speakEn || item.example || item.title;
+    const phrase = item.speakText || item.example || item.title;
     const lang = item.lang || "bn-BD";
-    await Promise.all([
-      speakTextWithTTS(textToSpeak, lang, 5000),
-      playGentleChime(0.25)
-    ]);
+    const timeout = lang.startsWith("ar") ? 12000 : 6500;
+    await speakNativeContinuous(phrase, lang, timeout);
   }
 
   function highlightCard(id) {
@@ -1145,7 +1304,7 @@
       card.addEventListener("click", (e) => {
         if (e.target.closest(".btn-rec")) {
           e.stopPropagation();
-          requestParentalAction(item, () => startOrStopRecording(item));
+          startOrStopRecording(item);
           return;
         }
         if (e.target.closest(".btn-listen")) {
@@ -1177,16 +1336,31 @@
   let mediaRecorder = null;
   let recordedChunks = [];
   let isRecordingNow = false;
+  let activeMicStream = null;
 
   function openFullscreenModal(item) {
     stopEverything(true);
     activeModalItem = item;
-    document.getElementById("modalGlyph").textContent = item.glyph;
-    document.getElementById("modalExample").textContent = item.example;
+    const glyphEl = document.getElementById("modalGlyph");
+    glyphEl.textContent = item.glyph;
+    glyphEl.classList.toggle("arabic-mode", currentCategory === "arabic" || currentCategory === "surah");
+
+    document.getElementById("modalHeadline").textContent = item.headline || item.title;
+    document.getElementById("modalSubline").textContent = item.subline || "";
+
+    const versesBox = document.getElementById("modalVersesBox");
+    if (Array.isArray(item.verses) && item.verses.length > 0) {
+      versesBox.style.display = "block";
+      versesBox.innerHTML = item.verses.map(v => `<div>${v}</div>`).join("");
+    } else {
+      versesBox.style.display = "none";
+      versesBox.innerHTML = "";
+    }
+
     document.getElementById("modalMeaning").textContent = item.meaning;
     document.getElementById("recStatusText").textContent = customVoiceCache.has(item.id)
       ? "এই আইটেমে আপনার কাস্টম ভয়েস সংরক্ষিত আছে"
-      : "ডিফল্ট ভয়েস সেট করা আছে (নিজের ভয়েস রেকর্ড বা অডিও ফাইল যুক্ত করতে পারেন)";
+      : "ডিফল্ট ভয়েস সেট করা আছে — সরাসরি 'ভয়েস পরিবর্তন' বা 'অডিও ফাইল যুক্ত করুন' চাপুন";
     document.getElementById("detailModal").classList.add("open");
     playSingleItem(item, ++playbackToken);
   }
@@ -1198,28 +1372,6 @@
     document.getElementById("detailModal").classList.remove("open");
   }
 
-  // Parental Gate
-  let pendingGateCallback = null;
-  let expectedMathAnswer = 7;
-
-  function requestParentalAction(item, actionFn) {
-    activeModalItem = item || activeModalItem;
-    if (!activeModalItem || typeof actionFn !== "function") return;
-    const a = Math.floor(Math.random() * 6) + 2;
-    const b = Math.floor(Math.random() * 5) + 2;
-    expectedMathAnswer = a + b;
-    document.getElementById("mathQuestionText").textContent = `${toBnNum(a)} + ${toBnNum(b)} = ?`;
-    document.getElementById("mathAnswerInput").value = "";
-    pendingGateCallback = actionFn;
-    document.getElementById("parentalGate").classList.add("open");
-    document.getElementById("mathAnswerInput").focus();
-  }
-
-  function closeParentalGate() {
-    pendingGateCallback = null;
-    document.getElementById("parentalGate").classList.remove("open");
-  }
-
   function pickRecorderMimeType() {
     if (typeof MediaRecorder === "undefined" || !MediaRecorder.isTypeSupported) return "";
     const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg"];
@@ -1229,57 +1381,21 @@
     return "";
   }
 
-
-  // ---------------- CHROME MICROPHONE PERMISSION ENGINE ----------------
-  let activeMicStream = null;
-  let micPermissionState = "unknown";
-
-  async function checkMicrophonePermissionState() {
-    if (navigator.permissions && navigator.permissions.query) {
-      try {
-        const status = await navigator.permissions.query({ name: "microphone" });
-        micPermissionState = status.state;
-        status.onchange = () => {
-          micPermissionState = status.state;
-          updateMicPermissionBanner();
-        };
-      } catch {}
-    }
-    updateMicPermissionBanner();
-  }
-
-  function updateMicPermissionBanner() {
-    const engineEl = document.getElementById("voiceEngineStatus");
-    if (!engineEl) return;
-    if (micPermissionState === "granted") {
-      engineEl.textContent = "মাইক্রোফোন অনুমতি দেওয়া আছে (Chrome Ready) — যেকোনো কার্ডে ট্যাপ করুন";
-    } else if (micPermissionState === "denied") {
-      engineEl.textContent = "Chrome-এ মাইক্রোফোন ব্লক করা আছে — অ্যাড্রেস বারের 🔒 / সাইট সেটিংস থেকে Allow করুন";
-    }
-  }
-
   async function requestChromeMicrophoneStream() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       throw new Error("UNSUPPORTED_MEDIA_DEVICES");
     }
-
     const constraintsList = [
       { audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } },
       { audio: true }
     ];
-
     let lastErr = null;
     for (const constraints of constraintsList) {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        micPermissionState = "granted";
-        updateMicPermissionBanner();
-        return stream;
+        return await navigator.mediaDevices.getUserMedia(constraints);
       } catch (err) {
         lastErr = err;
         if (err && (err.name === "NotAllowedError" || err.name === "PermissionDeniedError")) {
-          micPermissionState = "denied";
-          updateMicPermissionBanner();
           break;
         }
       }
@@ -1288,6 +1404,10 @@
   }
 
   async function startOrStopRecording(item) {
+    const targetItem = item || activeModalItem;
+    if (!targetItem) return;
+    activeModalItem = targetItem;
+
     if (isRecordingNow) {
       stopRecordingIfActive();
       return;
@@ -1295,13 +1415,13 @@
 
     if (typeof MediaRecorder === "undefined") {
       document.getElementById("recStatusText").textContent =
-        "এই ব্রাউজারে MediaRecorder নেই—পাশের 'অডিও ফাইল যুক্ত করুন' বাটন দিয়ে অডিও যুক্ত করতে পারেন।";
+        "এই ব্রাউজারে MediaRecorder নেই—'অডিও ফাইল যুক্ত করুন' বাটন দিয়ে অডিও যুক্ত করতে পারেন।";
       return;
     }
 
     try {
       stopEverything(true);
-      document.getElementById("recStatusText").textContent = "Chrome-এ মাইক্রোফোন অনুমতি চাওয়া হচ্ছে... অনুগ্রহ করে Allow চাপুন।";
+      document.getElementById("recStatusText").textContent = "মাইক্রোফোন অনুমতি চাওয়া হচ্ছে... অনুগ্রহ করে Allow চাপুন।";
       const stream = await requestChromeMicrophoneStream();
       activeMicStream = stream;
       recordedChunks = [];
@@ -1312,7 +1432,7 @@
       const btn = document.getElementById("modalChangeVoiceBtn");
       btn.textContent = "⏹ রেকর্ডিং বন্ধ করুন";
       btn.classList.add("recording");
-      document.getElementById("recStatusText").textContent = "মাইক্রোফোন চালু হয়েছে! রেকর্ডিং চলছে... কথা বলে 'রেকর্ডিং বন্ধ করুন' চাপুন";
+      document.getElementById("recStatusText").textContent = "রেকর্ডিং চলছে... কথা বলে 'রেকর্ডিং বন্ধ করুন' চাপুন";
 
       mediaRecorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) recordedChunks.push(e.data);
@@ -1330,7 +1450,7 @@
         if (recordedChunks.length > 0) {
           const finalType = mediaRecorder.mimeType || mimeType || "audio/webm";
           const blob = new Blob(recordedChunks, { type: finalType });
-          await saveCustomVoice(item.id, blob);
+          await saveCustomVoice(targetItem.id, blob);
           document.getElementById("recStatusText").textContent = "নিজের ভয়েস সফলভাবে সেভ হয়েছে! এখন 'নিজের ভয়েস' চাপুন।";
           renderCards();
         } else {
@@ -1347,11 +1467,9 @@
       const isHttpsOrLocal = location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1";
       let reason = "মাইক্রোফোন চালু করা যায়নি ('অডিও ফাইল যুক্ত করুন' ব্যবহার করতে পারেন)।";
       if (!isHttpsOrLocal) {
-        reason = "Chrome মাইক্রোফোন অনুমতির জন্য HTTPS (যেমন GitHub Pages) বা localhost প্রয়োজন। GitHub Pages চালু করুন অথবা 'অডিও ফাইল যুক্ত করুন' ব্যবহার করুন।";
+        reason = "মাইক্রোফোন অনুমতির জন্য HTTPS (যেমন GitHub Pages) বা localhost প্রয়োজন। GitHub Pages চালু করুন অথবা 'অডিও ফাইল যুক্ত করুন' ব্যবহার করুন।";
       } else if (err && (err.name === "NotAllowedError" || err.name === "PermissionDeniedError")) {
-        reason = "Chrome-এ মাইক্রোফোন অনুমতি ব্লক করা আছে! অ্যাড্রেস বারের বামে Lock/Tune আইকন → Site settings → Microphone → Allow করে রিলোড দিন।";
-      } else if (err && err.name === "NotFoundError") {
-        reason = "ডিভাইসে কোনো মাইক্রোফোন পাওয়া যায়নি—'অডিও ফাইল যুক্ত করুন' দিয়ে অডিও সেট করতে পারেন।";
+        reason = "মাইক্রোফোন অনুমতি ব্লক করা আছে! অ্যাড্রেস বারের বামে Lock/Tune আইকন → Site settings → Microphone → Allow করে রিলোড দিন।";
       }
       document.getElementById("recStatusText").textContent = reason;
     }
@@ -1366,7 +1484,7 @@
   // ---------------- EVENT BINDINGS ----------------
   document.addEventListener("DOMContentLoaded", async () => {
     await openVoiceDB();
-    await checkMicrophonePermissionState();
+    refreshVoices();
     renderSubFilters();
     renderCards();
 
@@ -1395,16 +1513,14 @@
 
     document.getElementById("modalChangeVoiceBtn").addEventListener("click", () => {
       if (!activeModalItem) return;
-      requestParentalAction(activeModalItem, () => startOrStopRecording(activeModalItem));
+      startOrStopRecording(activeModalItem);
     });
 
     const fileInput = document.getElementById("voiceFileInput");
     document.getElementById("modalUploadVoiceBtn").addEventListener("click", () => {
       if (!activeModalItem) return;
-      requestParentalAction(activeModalItem, () => {
-        fileInput.value = "";
-        fileInput.click();
-      });
+      fileInput.value = "";
+      fileInput.click();
     });
 
     fileInput.addEventListener("change", async (e) => {
@@ -1415,19 +1531,6 @@
       document.getElementById("recStatusText").textContent = "অডিও ফাইল সফলভাবে নিজের ভয়েস হিসেবে সেভ হয়েছে!";
       renderCards();
     });
-
-    document.getElementById("confirmGateBtn").addEventListener("click", () => {
-      const val = Number(document.getElementById("mathAnswerInput").value);
-      if (val === expectedMathAnswer) {
-        const cb = pendingGateCallback;
-        closeParentalGate();
-        if (cb) cb();
-      } else {
-        alert("ভুল উত্তর! সঠিক যোগফল লিখুন।");
-      }
-    });
-
-    document.getElementById("cancelGateBtn").addEventListener("click", closeParentalGate);
 
     document.getElementById("resetAllVoicesBtn").addEventListener("click", async () => {
       if (confirm("সব কাস্টম ভয়েস মুছে ডিফল্ট ভয়েসে ফিরতে চান?")) {
