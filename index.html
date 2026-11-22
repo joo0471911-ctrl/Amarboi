@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>শিশুদের বাংলা, ইংরেজি, গণিত ও আরবি শিক্ষা অ্যাপ</title>
+<style>
+  :root {
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --success: #059669;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Bengali", "Noto Naskh Arabic", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding-bottom: 100px;
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #fff;
+    padding: 18px 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  header h1 { font-size: 1.45rem; font-weight: 700; }
+  header p { font-size: 0.9rem; opacity: 0.92; margin-top: 4px; }
+
+  .container { max-width: 1120px; margin: 16px auto; padding: 0 14px; }
+
+  .top-controls {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .dropdown-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .dropdown-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+  }
+  label { font-weight: 700; font-size: 0.95rem; }
+  select {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: #f8fafc;
+    color: var(--text);
+    min-width: 210px;
+    cursor: pointer;
+  }
+
+  .quick-boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .q-box {
+    border: none;
+    border-radius: 12px;
+    padding: 11px 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+  .q-box:hover { transform: translateY(-2px); }
+  .q-box.active { outline: 3px solid #0f172a; transform: scale(1.02); }
+  .c1 { background: #2563eb; }
+  .c2 { background: #059669; }
+  .c3 { background: #7c3aed; }
+  .c4 { background: #db2777; }
+  .c5 { background: #d97706; }
+  .c6 { background: #0891b2; }
+  .c7 { background: #4f46e5; }
+
+  .sub-filter-bar {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    align-items: center;
+  }
+  .sub-pill {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #f1f5f9;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .sub-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .status-banner {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    position: relative;
+  }
+  .card:hover { transform: translateY(-3px); border-color: #93c5fd; }
+  .card.playing {
+    border-color: var(--success);
+    background: #ecfdf5;
+    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.18);
+  }
+  .badge-custom {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+  .main-glyph {
+    font-size: 2.3rem;
+    font-weight: 800;
+    margin: 6px 0;
+    color: #1e293b;
+  }
+  .arabic-glyph { font-size: 2.5rem; font-family: "Noto Naskh Arabic", serif; }
+  .title-text { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
+  .sub-text { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+  .card-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .btn-mini {
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-listen { background: #dbeafe; color: #1e40af; }
+  .btn-rec { background: #fee2e2; color: #991b1b; }
+
+  /* Sticky Play / Pause Bar */
+  .sticky-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0f172a;
+    color: #fff;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    z-index: 900;
+    box-shadow: 0 -6px 20px rgba(0,0,0,0.2);
+    flex-wrap: wrap;
+  }
+  .player-info { font-size: 0.9rem; font-weight: 600; }
+  .player-btns { display: flex; gap: 10px; align-items: center; }
+  .p-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+  }
+  .p-play { background: var(--success); }
+  .p-pause { background: var(--warning); }
+  .p-stop { background: var(--danger); }
+
+  /* Fullscreen Modal */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.88);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal-card {
+    background: #fff;
+    color: var(--text);
+    width: 100%;
+    max-width: 580px;
+    border-radius: 24px;
+    padding: 28px 22px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  }
+  .close-modal {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: #f1f5f9;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .modal-glyph {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.2;
+  }
+  .modal-example {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    margin: 16px 0;
+  }
+  .modal-meaning {
+    font-size: 0.98rem;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .own-voice-btn {
+    display: block;
+    width: 100%;
+    padding: 15px 18px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    border: none;
+    border-radius: 14px;
+    background: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  .change-voice-btn {
+    display: inline-block;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: #f1f5f9;
+    color: #334155;
+    cursor: pointer;
+  }
+  .change-voice-btn.recording {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+  }
+  .rec-status {
+    margin-top: 8px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--danger);
+    min-height: 22px;
+  }
+
+  /* Parental Gate Modal */
+  .gate-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    z-index: 1200;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .gate-backdrop.open { display: flex; }
+  .gate-box {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+  }
+  .gate-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.1rem;
+    text-align: center;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    margin: 12px 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>শিশুদের বাংলা, ইংরেজি, গণিত ও আরবি শিক্ষা অ্যাপ</h1>
+  <p>স্বরবর্ণ, ব্যঞ্জনবর্ণ, সংখ্যা, নামতা, ইংরেজি, আরবি হরফ ও কোরআনের সূরা — অভিভাবকের কণ্ঠে রেকর্ড ও প্লে করুন</p>
+</header>
+
+<div class="container">
+  <section class="top-controls">
+    <div class="dropdown-row">
+      <div class="dropdown-group">
+        <label for="categorySelect">বিষয় নির্বাচন করুন:</label>
+        <select id="categorySelect" aria-label="বিষয় নির্বাচন">
+          <option value="soroborno">স্বরবর্ণ (অ - ঔ)</option>
+          <option value="banjonborno">ব্যঞ্জনবর্ণ (ক - ঁ)</option>
+          <option value="numbers">গাণিতিক সংখ্যা (১ - ১০০ / 1 - 100)</option>
+          <option value="namta">নামতা (১ থেকে ২০-এর ঘর)</option>
+          <option value="english">ইংরেজি অ্যালফাবেট (A - Z)</option>
+          <option value="arabic">আরবি হরফ (ا - ي)</option>
+          <option value="surah">কোরআনের সূরা (সূরা ফাতিহা ও শেষ ১০ সূরা)</option>
+        </select>
+      </div>
+      <button class="sub-pill" id="resetAllVoicesBtn" title="সব কাস্টম ভয়েস রিসেট করুন">ডিফল্ট ভয়েসে ফিরুন</button>
+    </div>
+
+    <div class="quick-boxes" id="quickBoxes">
+      <button class="q-box c1 active" data-cat="soroborno">স্বরবর্ণ</button>
+      <button class="q-box c2" data-cat="banjonborno">ব্যঞ্জনবর্ণ</button>
+      <button class="q-box c3" data-cat="numbers">গাণিতিক সংখ্যা</button>
+      <button class="q-box c4" data-cat="namta">নামতা</button>
+      <button class="q-box c5" data-cat="english">ইংরেজি অ্যালফাবেট</button>
+      <button class="q-box c6" data-cat="arabic">আরবি হরফ</button>
+      <button class="q-box c7" data-cat="surah">আরবি সূরা</button>
+    </div>
+
+    <div class="sub-filter-bar" id="subFilterBar"></div>
+  </section>
+
+  <div class="status-banner">
+    <span id="currentSectionTitle">স্বরবর্ণ (অ - ঔ)</span>
+    <span id="voiceEngineStatus">ভয়েস ইঞ্জিন প্রস্তুত — যেকোনো কার্ডে ট্যাপ করুন</span>
+  </div>
+
+  <main class="grid" id="cardsGrid"></main>
+</div>
+
+<!-- Sticky Play / Pause / Stop Bar -->
+<div class="sticky-player">
+  <div class="player-info" id="playerStatusText">প্রস্তুত: সবগুলো ধারাবাহিকভাবে শুনতে প্লে চাপুন</div>
+  <div class="player-btns">
+    <button class="p-btn p-play" id="playAllBtn">▶ সব প্লে</button>
+    <button class="p-btn p-pause" id="pauseResumeBtn">⏸ পজ</button>
+    <button class="p-btn p-stop" id="stopAllBtn">⏹ বন্ধ</button>
+  </div>
+</div>
+
+<!-- Fullscreen Popup Modal -->
+<div class="modal-backdrop" id="detailModal" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <button class="close-modal" id="closeModalBtn" aria-label="বন্ধ করুন">✕</button>
+    <div class="modal-glyph" id="modalGlyph">অ</div>
+    <div class="modal-example" id="modalExample">অ-তে অজগর, অজগরটি আসছে তেড়ে</div>
+    <div class="modal-meaning" id="modalMeaning">স্বরবর্ণের প্রথম বর্ণ</div>
+
+    <button class="own-voice-btn" id="modalPlayVoiceBtn">🔊 নিজের ভয়েস</button>
+    <button class="change-voice-btn" id="modalChangeVoiceBtn">🎙 ভয়েস পরিবর্তন</button>
+    <div class="rec-status" id="recStatusText"></div>
+  </div>
+</div>
+
+<!-- Parental Gate Modal -->
+<div class="gate-backdrop" id="parentalGate" role="dialog" aria-modal="true">
+  <div class="gate-box">
+    <h3>অভিভাবক যাচাইকরণ</h3>
+    <p style="font-size:0.88rem;color:#475569;margin-top:6px;">
+      শিশুরা যাতে ভুলবশত ভয়েস পরিবর্তন করতে না পারে, তাই সঠিক যোগফল লিখুন:
+    </p>
+    <div id="mathQuestionText" style="font-size:1.3rem;font-weight:800;margin-top:10px;">৩ + ৪ = ?</div>
+    <input type="number" id="mathAnswerInput" placeholder="উত্তর লিখুন" />
+    <div style="display:flex;gap:8px;justify-content:center;">
+      <button class="p-btn p-play" id="confirmGateBtn">নিশ্চিত করুন</button>
+      <button class="p-btn p-stop" id="cancelGateBtn">বাতিল</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  // ---------------- DATA ----------------
+  const BN_DIGITS = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
+  const BN_WORDS = {
+    1:"এক",2:"দুই",3:"তিন",4:"চার",5:"পাঁচ",6:"ছয়",7:"সাত",8:"আট",9:"নয়",10:"দশ",
+    11:"এগারো",12:"বারো",13:"তেরো",14:"চৌদ্দ",15:"পনেরো",16:"ষোল",17:"সতেরো",18:"আঠারো",19:"উনিশ",20:"বিশ",
+    21:"একুশ",22:"বাইশ",23:"তেইশ",24:"চব্বিশ",25:"পঁচিশ",26:"ছাব্বিশ",27:"সাতাশ",28:"আঠাশ",29:"ঊনত্রিশ",30:"ত্রিশ",
+    31:"একত্রিশ",32:"বত্রিশ",33:"তেত্রিশ",34:"চৌত্রিশ",35:"পঁয়ত্রিশ",36:"ছত্রিশ",37:"সাঁইত্রিশ",38:"আটত্রিশ",39:"ঊনচল্লিশ",40:"চল্লিশ",
+    41:"একচল্লিশ",42:"বিয়াল্লিশ",43:"তেতাল্লিশ",44:"চুয়াল্লিশ",45:"পঁয়তাল্লিশ",46:"ছেচল্লিশ",47:"সাতচল্লিশ",48:"আটচল্লিশ",49:"ঊনপঞ্চাশ",50:"পঞ্চাশ",
+    51:"একান্ন",52:"বাহান্ন",53:"তিপ্পান্ন",54:"চুয়ান্ন",55:"পঞ্চান্ন",56:"ছাপ্পান্ন",57:"সাতান্ন",58:"আটান্ন",59:"ঊনষাট",60:"ষাট",
+    61:"একষট্টি",62:"বাষট্টি",63:"তেষট্টি",64:"চৌষট্টি",65:"পঁয়ষট্টি",66:"ছেষট্টি",67:"সাতষট্টি",68:"আটষট্টি",69:"ঊনসত্তর",70:"সত্তর",
+    71:"একাত্তর",72:"বাহাত্তর",73:"তিয়াত্তর",74:"চুয়াত্তর",75:"পঁচাত্তর",76:"ছিয়াত্তর",77:"সাতাত্তর",78:"আটাত্তর",79:"ঊনআশি",80:"আশি",
+    81:"একাশি",82:"বিরাশি",83:"তিরাশি",84:"চুরাশি",85:"পঁচাশি",86:"ছিয়াশি",87:"সাতাশি",88:"আটাশি",89:"ঊননব্বই",90:"নব্বই",
+    91:"একানব্বই",92:"বিরানব্বই",93:"তিরানব্বই",94:"চুরানব্বই",95:"পঁচানব্বই",96:"ছিয়ানব্বই",97:"সাতানব্বই",98:"আটানব্বই",99:"নিরানব্বই",100:"একশ"
+  };
+
+  function toBnNum(n) {
+    return String(n).split("").map(ch => BN_DIGITS[Number(ch)] ?? ch).join("");
+  }
+
+  const SOROBORNO = [
+    { id: "soro-1", glyph: "অ", title: "স্বরে অ", example: "অ-তে অজগর, অজগরটি আসছে তেড়ে", meaning: "স্বরবর্ণের প্রথম বর্ণ", speakBn: "অ। অ-তে অজগর, অজগরটি আসছে তেড়ে।", lang: "bn-BD" },
+    { id: "soro-2", glyph: "আ", title: "স্বরে আ", example: "আ-তে আম, আমটি আমি খাব পেড়ে", meaning: "স্বরবর্ণের দ্বিতীয় বর্ণ", speakBn: "আ। আ-তে আম, আমটি আমি খাব পেড়ে।", lang: "bn-BD" },
+    { id: "soro-3", glyph: "ই", title: "হ্রস্ব ই", example: "ই-তে ইঁদুর, ইঁদুর ছানা ভয়ে মরে", meaning: "স্বরবর্ণের তৃতীয় বর্ণ", speakBn: "ই। ই-তে ইঁদুর, ইঁদুর ছানা ভয়ে মরে।", lang: "bn-BD" },
+    { id: "soro-4", glyph: "ঈ", title: "দীর্ঘ ঈ", example: "ঈ-তে ঈগল, ঈগল পাখি আকাশে ওড়ে", meaning: "স্বরবর্ণের চতুর্থ বর্ণ", speakBn: "ঈ। ঈ-তে ঈগল, ঈগল পাখি আকাশে ওড়ে।", lang: "bn-BD" },
+    { id: "soro-5", glyph: "উ", title: "হ্রস্ব উ", example: "উ-তে উট, উট চলেছে মরুর চরে", meaning: "স্বরবর্ণের পঞ্চম বর্ণ", speakBn: "উ। উ-তে উট, উট চলেছে মরুর চরে।", lang: "bn-BD" },
+    { id: "soro-6", glyph: "ঊ", title: "দীর্ঘ ঊ", example: "ঊ-তে ঊষা, ঊষার আলোয় ভোর নামে", meaning: "স্বরবর্ণের ষষ্ঠ বর্ণ", speakBn: "ঊ। ঊ-তে ঊষা, ঊষার আলোয় ভোর নামে।", lang: "bn-BD" },
+    { id: "soro-7", glyph: "ঋ", title: "ঋ", example: "ঋ-তে ঋষি, ঋষি বসেন ধ্যানের ঘরে", meaning: "স্বরবর্ণের সপ্তম বর্ণ", speakBn: "ঋ। ঋ-তে ঋষি, ঋষি বসেন ধ্যানের ঘরে।", lang: "bn-BD" },
+    { id: "soro-8", glyph: "এ", title: "এ", example: "এ-তে একতারা, একতারা বাজে সুরের তালে", meaning: "স্বরবর্ণের অষ্টম বর্ণ", speakBn: "এ। এ-তে একতারা, একতারা বাজে সুরের তালে।", lang: "bn-BD" },
+    { id: "soro-9", glyph: "ঐ", title: "ঐ", example: "ঐ-তে ঐরাবত, ঐরাবত চলে ধীরে ধীরে", meaning: "স্বরবর্ণের নবম বর্ণ", speakBn: "ঐ। ঐ-তে ঐরাবত, ঐরাবত চলে ধীরে ধীরে।", lang: "bn-BD" },
+    { id: "soro-10", glyph: "ও", title: "ও", example: "ও-তে ওল, ওল খেয়ো না ধরবে গলা", meaning: "স্বরবর্ণের দশম বর্ণ", speakBn: "ও। ও-তে ওল, ওল খেয়ো না ধরবে গলা।", lang: "bn-BD" },
+    { id: "soro-11", glyph: "ঔ", title: "ঔ", example: "ঔ-তে ঔষধ, ঔষধ খেলে রোগ সারে", meaning: "স্বরবর্ণের একাদশ বর্ণ", speakBn: "ঔ। ঔ-তে ঔষধ, ঔষধ খেলে রোগ সারে।", lang: "bn-BD" }
+  ];
+
+  const BANJONBORNO_RAW = [
+    ["ক","ক-তে কলম, কলম দিয়ে লিখি কথা"],["খ","খ-তে খাতা, খাতা ভরে আঁকি ছবি"],
+    ["গ","গ-তে গরু, গরু ঘাস খায় মাঠে"],["ঘ","ঘ-তে ঘোড়া, ঘোড়া ছোটে দ্রুত বেগে"],
+    ["ঙ","ঙ-তে ব্যাং, ব্যাং ডাকে বর্ষাকালে"],["চ","চ-তে চিতা, চিতা বাঘের তীক্ষ্ণ দৃষ্টি"],
+    ["ছ","ছ-তে ছাতা, রোদ-বৃষ্টিতে মাথায় দিই"],["জ","জ-তে জাহাজ, জাহাজ চলে সাগর জলে"],
+    ["ঝ","ঝ-তে ঝড়, ঝড় এলে গাছ দোলে"],["ঞ","ঞ-তে মিঞা, মিঞা সাহেব আসেন বাড়ি"],
+    ["ট","ট-তে টিয়া, টিয়া পাখির লাল ঠোঁট"],["ঠ","ঠ-তে ঠেলাগাড়ি, ঠেলাগাড়ি টানে মাঝি"],
+    ["ড","ড-তে ডাব, ডাবের পানি মিষ্টি ভারী"],["ঢ","ঢ-তে ঢোল, ঢোল বাজে উৎসবের দিনে"],
+    ["ণ","ণ-তে হরিণ, হরিণ ছোটে বনের মাঝে"],["ত","ত-তে তিমি, তিমি মাছের বিশাল দেহ"],
+    ["থ","থ-তে থালা, থালায় সাজাই খাবার আজ"],["দ","দ-তে দোয়েল, দোয়েল আমাদের জাতীয় পাখি"],
+    ["ধ","ধ-তে ধান, সোনালি ধানে ভরে মাঠ"],["ন","ন-তে নৌকা, নৌকা চলে নদীর জলে"],
+    ["প","প-তে পাখি, পাখি গান গায় সকালবেলা"],["ফ","ফ-তে ফুল, ফুলের সুবাস চারিদিকে"],
+    ["ব","ব-তে বই, বই পড়ে জ্ঞান বাড়াই"],["ভ","ভ-তে ভালুক, ভালুক থাকে পাহাড় বনে"],
+    ["ম","ম-তে মা, মা আমাদের ভালোবাসেন"],["য","য-তে যাঁতা, যাঁতা ঘোরে আপন মনে"],
+    ["র","র-তে রাজা, রাজার আছে সোনার মুকুট"],["ল","ল-তে লেবু, লেবুর রসে ভিটামিন সি"],
+    ["শ","শ-তে শাপলা, শাপলা আমাদের জাতীয় ফুল"],["ষ","ষ-তে ষাঁড়, ষাঁড় চলে হাল টেনে"],
+    ["স","স-তে সিংহ, সিংহ বনের রাজা"],["হ","হ-তে হাতি, হাতির শুঁড় লম্বা বেশ"],
+    ["ড়","ড়-তে গাড়ি, গাড়ি চলে রাজপথে"],["ঢ়","ঢ়-তে আষাঢ়, আষাঢ় মাসে নামে বৃষ্টি"],
+    ["য়","য়-তে পায়রা, পায়রা ওড়ে আকাশপানে"],["ৎ","ৎ-তে উৎসব, আনন্দে মেতে উঠি সবাই"],
+    ["ং","ং-তে অনুস্বার, শব্দের শেষে বসে"],["ঃ","ঃ-তে বিসর্গ, শব্দে যোগ করে ধ্বনি"],
+    ["ঁ","ঁ-তে চন্দ্রবিন্দু, চাঁদের মতো হাসি মাখে"]
+  ];
+
+  const BANJONBORNO = BANJONBORNO_RAW.map(([g, ex], i) => ({
+    id: `banjo-${i+1}`,
+    glyph: g,
+    title: `ব্যঞ্জনবর্ণ '${g}'`,
+    example: ex,
+    meaning: `ব্যঞ্জনবর্ণের ${toBnNum(i+1)}তম বর্ণ`,
+    speakBn: `${g}। ${ex}।`,
+    lang: "bn-BD"
+  }));
+
+  const NUMBERS = [];
+  for (let n = 1; n <= 100; n++) {
+    const bnN = toBnNum(n);
+    const bnW = BN_WORDS[n] || bnN;
+    NUMBERS.push({
+      id: `num-${n}`,
+      glyph: `${bnN} / ${n}`,
+      title: `সংখ্যা ${bnN} (${n})`,
+      example: `বাংলায় ${bnN} (${bnW}) এবং ইংরেজিতে ${n}`,
+      meaning: "গাণিতিক সংখ্যা (বাংলা ও ইংরেজি)",
+      speakBn: `${bnN}, ${bnW}। ইংরেজিতে ${n}।`,
+      speakEn: `${n}`,
+      lang: "bn-BD"
+    });
+  }
+
+  const NAMTA = [];
+  for (let table = 1; table <= 20; table++) {
+    for (let mul = 1; mul <= 10; mul++) {
+      const prod = table * mul;
+      const bT = toBnNum(table);
+      const bM = toBnNum(mul);
+      const bP = toBnNum(prod);
+      NAMTA.push({
+        id: `namta-${table}-${mul}`,
+        table,
+        glyph: `${bT} × ${bM} = ${bP}`,
+        title: `${bT}-এর নামতা (${table} × ${mul} = ${prod})`,
+        example: `${BN_WORDS[table] || bT} গুণ ${BN_WORDS[mul] || bM} সমান ${BN_WORDS[prod] || bP}`,
+        meaning: `${bT}-এর ঘরের নামতা`,
+        speakBn: `${BN_WORDS[table] || bT} গুণ ${BN_WORDS[mul] || bM} সমান ${BN_WORDS[prod] || bP}।`,
+        lang: "bn-BD"
+      });
+    }
+  }
+
+  const ENG_WORDS = {
+    A:"Apple",B:"Ball",C:"Cat",D:"Dog",E:"Elephant",F:"Fish",G:"Goat",H:"Hat",I:"Ice cream",
+    J:"Jug",K:"Kite",L:"Lion",M:"Mango",N:"Nest",O:"Orange",P:"Pen",Q:"Queen",R:"Rabbit",
+    S:"Sun",T:"Tiger",U:"Umbrella",V:"Van",W:"Watch",X:"Xylophone",Y:"Yak",Z:"Zebra"
+  };
+  const ENGLISH = Object.entries(ENG_WORDS).map(([ch, word], idx) => ({
+    id: `eng-${idx+1}`,
+    glyph: `${ch} ${ch.toLowerCase()}`,
+    title: `Letter ${ch}`,
+    example: `${ch} for ${word}`,
+    meaning: `ইংরেজি বর্ণমালার ${toBnNum(idx+1)}তম অক্ষর`,
+    speakEn: `${ch} for ${word}.`,
+    speakBn: `${ch} ফর ${word}`,
+    lang: "en-US"
+  }));
+
+  const ARABIC_RAW = [
+    ["ا","আলিফ"],["ب","বা"],["ت","তা"],["ث","ছা"],["ج","জিম"],["ح","হা"],["خ","খ"],
+    ["দ","দাল"],["ذ","যাল"],["র","রা"],["য","যা"],["স","সিন"],["শ","শিন"],["স","সোয়াদ"],
+    ["দ","দোয়াদ"],["ত","ত্বা"],["জ","যোয়া"],["আইন","আইন"],["গাইন","গাইন"],["ফ","ফা"],
+    ["ক","ক্বাফ"],["ক","কাফ"],["ল","লাম"],["ম","মিম"],["ন","নুন"],["ও","ওয়াও"],["হ","হা"],
+    ["হামজা","হামজা"],["ই","ইয়া"]
+  ];
+  // Use proper distinct Arabic letters
+  const ARABIC_LETTERS = [
+    ["ا","আলিফ"],["ب","বা"],["ت","তা"],["ث","ছা"],["ج","জিম"],["ح","হা"],["خ","খ"],
+    ["د","দাল"],["ذ","যাল"],["ر","রা"],["ز","যা"],["س","সিন"],["ش","শিন"],["ص","সোয়াদ"],
+    ["ض","দোয়াদ"],["ط","ত্বা"],["ظ","যোয়া"],["ع","আইন"],["غ","গাইন"],["ف","ফা"],
+    ["ق","ক্বাফ"],["ك","কাফ"],["ل","লাম"],["م","মিম"],["ن","নুন"],["و","ওয়াও"],["ه","হা"],
+    ["ء","হামজা"],["ي","ইয়া"]
+  ];
+  const ARABIC = ARABIC_LETTERS.map(([g, name], i) => ({
+    id: `arb-${i+1}`,
+    glyph: g,
+    title: `আরবি হরফ: ${name}`,
+    example: `হরফ '${g}' — উচ্চারণ: ${name}`,
+    meaning: `আরবি বর্ণমালার ${toBnNum(i+1)}তম হরফ`,
+    speakAr: name,
+    speakBn: `আরবি হরফ ${name}`,
+    lang: "ar-SA"
+  }));
+
+  const SURAHS = [
+    {
+      id: "surah-1",
+      glyph: "الْفَاتِحَة",
+      title: "সূরা আল-ফাতিহা (১)",
+      example: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+      meaning: "সব প্রশংসা মহান আল্লাহর যিনি সমগ্র বিশ্বজগতের প্রতিপালক (মোট ৭ আয়াত)",
+      speakAr: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ الرَّحْمَٰنِ الرَّحِيمِ مَالِكِ يَوْمِ الدِّينِ",
+      speakBn: "সূরা আল-ফাতিহা। আলহামদুলিল্লাহি রাব্বিল আলামিন।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-105",
+      glyph: "الْفِيلِ",
+      title: "সূরা আল-ফীল (১০৫)",
+      example: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ",
+      meaning: "আপনি কি দেখেননি আপনার প্রতিপালক হস্তীওয়ালাদের সাথে কী করেছিলেন?",
+      speakAr: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ",
+      speakBn: "সূরা আল-ফীল। আলাম তারা কাইফা ফাআলা রব্বুকা বিআসহাবিল ফিল।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-106",
+      glyph: "قُرَيْشٍ",
+      title: "সূরা কুরাইশ (১০৬)",
+      example: "لِإِيلَافِ قُرَيْشٍ — فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ",
+      meaning: "কুরাইশের আসক্তির কারণে; তারা এই ঘরের প্রভুর ইবাদত করুক",
+      speakAr: "لِإِيلَافِ قُرَيْشٍ إِيلَافِهِمْ رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ",
+      speakBn: "সূরা কুরাইশ। লিইলাফি কুরাইশ।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-107",
+      glyph: "الْمَاعُونَ",
+      title: "সূরা আল-মাউন (১০৭)",
+      example: "أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ",
+      meaning: "আপনি কি তাকে দেখেছেন যে কর্মফল দিবসকে অস্বীকার করে?",
+      speakAr: "أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ",
+      speakBn: "সূরা আল-মাউন। আরাআইতাল্লাযি ইউকাযযিবু বিদ্দিন।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-108",
+      glyph: "الْكَوْثَرِ",
+      title: "সূরা আল-কাওসার (১০৮)",
+      example: "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
+      meaning: "নিশ্চয়ই আমি আপনাকে আল-কাওসার দান করেছি",
+      speakAr: "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ فَصَلِّ لِرَبِّكَ وَانْحَرْ",
+      speakBn: "সূরা আল-কাওসার। ইন্না আত্বাইনাকাল কাওসার।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-109",
+      glyph: "الْكَافِرُونَ",
+      title: "সূরা আল-কাফিরুন (১০৯)",
+      example: "قُلْ يَا أَيُّهَا الْكَافِرُونَ",
+      meaning: "বলুন, হে কাফিরগণ! আমি তাদের ইবাদত করি না যাদের তোমরা করো",
+      speakAr: "قُلْ يَا أَيُّهَا الْكَافِرُونَ لَا أَعْبُدُ مَا تَعْبُدُونَ",
+      speakBn: "সূরা আল-কাফিরুন। কুল ইয়া আইয়ুহাল কাফিরুন।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-110",
+      glyph: "النَّصْرِ",
+      title: "সূরা আন-নাসর (১১০)",
+      example: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
+      meaning: "যখন আল্লাহর সাহায্য ও বিজয় আসবে",
+      speakAr: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
+      speakBn: "সূরা আন-নাসর। ইযা জাআ নাসরুল্লাহি ওয়াল ফাতহ।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-111",
+      glyph: "الْمَسَدِ",
+      title: "সূরা আল-মাসাদ (১১১)",
+      example: "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ",
+      meaning: "আবু লাহাবের উভয় হাত ধ্বংস হোক এবং সে নিজেও ধ্বংস হোক",
+      speakAr: "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ",
+      speakBn: "সূরা আল-মাসাদ। তাব্বাত ইয়াদা আবি লাহাবিওঁ ওয়া তাব্ব।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-112",
+      glyph: "الْإِخْلَاصِ",
+      title: "সূরা আল-ইখলাস (১১২)",
+      example: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+      meaning: "বলুন, তিনি আল্লাহ, এক ও অদ্বিতীয়",
+      speakAr: "قُلْ هُوَ اللَّهُ أَحَدٌ اللَّهُ الصَّمَدُ",
+      speakBn: "সূরা আল-ইখলাস। কুল হুয়াল্লাহু আহাদ।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-113",
+      glyph: "الْفَلَقِ",
+      title: "সূরা আল-ফালাক (১১৩)",
+      example: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
+      meaning: "বলুন, আমি আশ্রয় নিচ্ছি ভোরের প্রভুর কাছে",
+      speakAr: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
+      speakBn: "সূরা আল-ফালাক। কুল আউযু বিরাব্বিল ফালাক।",
+      lang: "ar-SA"
+    },
+    {
+      id: "surah-114",
+      glyph: "النَّاسِ",
+      title: "সূরা আন-নাস (১১৪)",
+      example: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+      meaning: "বলুন, আমি আশ্রয় নিচ্ছি মানুষের প্রভুর কাছে",
+      speakAr: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+      speakBn: "সূরা আন-নাস। কুল আউযু বিরাব্বিন নাস।",
+      lang: "ar-SA"
+    }
+  ];
+
+  const ALL_DATA = {
+    soroborno: { title: "স্বরবর্ণ (অ - ঔ)", items: SOROBORNO },
+    banjonborno: { title: "ব্যঞ্জনবর্ণ (ক - ঁ)", items: BANJONBORNO },
+    numbers: { title: "গাণিতিক সংখ্যা (১ - ১০০ / 1 - 100)", items: NUMBERS },
+    namta: { title: "নামতা (১ থেকে ২০-এর ঘর)", items: NAMTA },
+    english: { title: "ইংরেজি অ্যালফাবেট (A - Z)", items: ENGLISH },
+    arabic: { title: "আরবি হরফ (ا - ي)", items: ARABIC },
+    surah: { title: "কোরআনের সূরা (সূরা ফাতিহা ও শেষ ১০ সূরা)", items: SURAHS }
+  };
+
+  // ---------------- INDEXEDDB FOR CUSTOM VOICES ----------------
+  const DB_NAME = "KidsVoiceAppDB";
+  const STORE_NAME = "customVoices";
+  let db = null;
+  const customVoiceCache = new Map(); // id -> Blob
+
+  function openVoiceDB() {
+    return new Promise((resolve) => {
+      if (!("indexedDB" in window)) return resolve(null);
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = (e) => {
+        const database = e.target.result;
+        if (!database.objectStoreNames.contains(STORE_NAME)) {
+          database.createObjectStore(STORE_NAME);
+        }
+      };
+      req.onsuccess = async (e) => {
+        db = e.target.result;
+        await loadAllCustomVoicesToCache();
+        resolve(db);
+      };
+      req.onerror = () => resolve(null);
+    });
+  }
+
+  function loadAllCustomVoicesToCache() {
+    return new Promise((resolve) => {
+      if (!db) return resolve();
+      const tx = db.transaction(STORE_NAME, "readonly");
+      const store = tx.objectStore(STORE_NAME);
+      const cursorReq = store.openCursor();
+      cursorReq.onsuccess = (e) => {
+        const cursor = e.target.result;
+        if (cursor) {
+          customVoiceCache.set(cursor.key, cursor.value);
+          cursor.continue();
+        } else {
+          resolve();
+        }
+      };
+      cursorReq.onerror = () => resolve();
+    });
+  }
+
+  function saveCustomVoice(id, blob) {
+    customVoiceCache.set(id, blob);
+    if (!db) return Promise.resolve();
+    return new Promise((resolve) => {
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).put(blob, id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    });
+  }
+
+  function clearAllCustomVoices() {
+    customVoiceCache.clear();
+    if (!db) return Promise.resolve();
+    return new Promise((resolve) => {
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    });
+  }
+
+  // ---------------- AUDIO & SPEECH ENGINE ----------------
+  let audioCtx = null;
+  let activeAudioEl = null;
+  let playbackToken = 0;
+  let isPlayingQueue = false;
+  let isPausedQueue = false;
+  let queueItems = [];
+  let queueIndex = 0;
+
+  function ensureAudioContext() {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (Ctx && !audioCtx) {
+      audioCtx = new Ctx();
+    }
+    if (audioCtx && audioCtx.state === "suspended") {
+      audioCtx.resume().catch(() => {});
+    }
+  }
+
+  function playGentleChime(durationSec = 0.35) {
+    return new Promise((resolve) => {
+      try {
+        ensureAudioContext();
+        if (!audioCtx) return resolve();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.exponentialRampToValueAtTime(659.25, now + durationSec * 0.6); // E5
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + durationSec);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + durationSec + 0.02);
+        setTimeout(resolve, durationSec * 1000 + 40);
+      } catch {
+        resolve();
+      }
+    });
+  }
+
+  function speakTextWithTTS(text, lang = "bn-BD", timeoutMs = 4500) {
+    return new Promise((resolve) => {
+      if (!("speechSynthesis" in window)) {
+        playGentleChime(0.45).then(resolve);
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = lang;
+        utter.rate = 0.92;
+        utter.pitch = 1.05;
+
+        const voices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
+        const matched = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(lang.split("-")[0].toLowerCase()));
+        if (matched) utter.voice = matched;
+
+        let settled = false;
+        const finish = () => {
+          if (!settled) {
+            settled = true;
+            clearTimeout(timer);
+            resolve();
+          }
+        };
+
+        const timer = setTimeout(finish, timeoutMs);
+        utter.onend = finish;
+        utter.onerror = finish;
+        window.speechSynthesis.speak(utter);
+      } catch {
+        playGentleChime(0.45).then(resolve);
+      }
+    });
+  }
+
+  function playBlobAudio(blob) {
+    return new Promise((resolve) => {
+      try {
+        if (activeAudioEl) {
+          activeAudioEl.pause();
+          activeAudioEl = null;
+        }
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        activeAudioEl = audio;
+        const cleanup = () => {
+          URL.revokeObjectURL(url);
+          if (activeAudioEl === audio) activeAudioEl = null;
+          resolve();
+        };
+        audio.onended = cleanup;
+        audio.onerror = cleanup;
+        audio.play().catch(cleanup);
+      } catch {
+        resolve();
+      }
+    });
+  }
+
+  function stopEverything(resetQueue = true) {
+    playbackToken++;
+    if (activeAudioEl) {
+      activeAudioEl.pause();
+      activeAudioEl = null;
+    }
+    if ("speechSynthesis" in window) {
+      try { window.speechSynthesis.cancel(); } catch {}
+    }
+    document.querySelectorAll(".card.playing").forEach(el => el.classList.remove("playing"));
+    if (resetQueue) {
+      isPlayingQueue = false;
+      isPausedQueue = false;
+      queueItems = [];
+      queueIndex = 0;
+      setPlayerStatus("প্রস্তুত: সবগুলো ধারাবাহিকভাবে শুনতে প্লে চাপুন");
+    }
+  }
+
+  async function playSingleItem(item, token) {
+    highlightCard(item.id);
+    if (customVoiceCache.has(item.id)) {
+      await playBlobAudio(customVoiceCache.get(item.id));
+      if (token !== playbackToken) return;
+      await playGentleChime(0.15);
+      return;
+    }
+
+    // Default built-in voice (TTS + gentle musical feedback so never silent)
+    const textToSpeak = item.speakBn || item.speakAr || item.speakEn || item.example || item.title;
+    const lang = item.lang || "bn-BD";
+    await Promise.all([
+      speakTextWithTTS(textToSpeak, lang, 5000),
+      playGentleChime(0.25)
+    ]);
+  }
+
+  function highlightCard(id) {
+    document.querySelectorAll(".card.playing").forEach(el => el.classList.remove("playing"));
+    const card = document.querySelector(`.card[data-id="${id}"]`);
+    if (card) {
+      card.classList.add("playing");
+      card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }
+
+  function setPlayerStatus(msg) {
+    document.getElementById("playerStatusText").textContent = msg;
+    document.getElementById("voiceEngineStatus").textContent = msg;
+  }
+
+  // ---------------- QUEUE PLAY / PAUSE / STOP ----------------
+  async function startPlayAll() {
+    const visibleItems = getCurrentFilteredItems();
+    if (!visibleItems.length) return;
+    stopEverything(true);
+    isPlayingQueue = true;
+    isPausedQueue = false;
+    queueItems = visibleItems;
+    queueIndex = 0;
+    const myToken = playbackToken;
+
+    while (isPlayingQueue && queueIndex < queueItems.length && myToken === playbackToken) {
+      if (isPausedQueue) {
+        setPlayerStatus(`পজ করা হয়েছে (${toBnNum(queueIndex + 1)} / ${toBnNum(queueItems.length)})`);
+        await new Promise(r => setTimeout(r, 200));
+        continue;
+      }
+
+      const currentItem = queueItems[queueIndex];
+      setPlayerStatus(`বাজছে (${toBnNum(queueIndex + 1)} / ${toBnNum(queueItems.length)}): ${currentItem.title}`);
+      await playSingleItem(currentItem, myToken);
+
+      if (myToken !== playbackToken || !isPlayingQueue) break;
+      if (!isPausedQueue) {
+        queueIndex++;
+        await new Promise(r => setTimeout(r, 260));
+      }
+    }
+
+    if (myToken === playbackToken) {
+      stopEverything(true);
+      setPlayerStatus("সবগুলো শোনা সম্পন্ন হয়েছে");
+    }
+  }
+
+  function togglePauseResume() {
+    if (!isPlayingQueue) {
+      startPlayAll();
+      return;
+    }
+    isPausedQueue = !isPausedQueue;
+    if (isPausedQueue) {
+      if (activeAudioEl) activeAudioEl.pause();
+      if ("speechSynthesis" in window) {
+        try { window.speechSynthesis.pause(); } catch {}
+      }
+      setPlayerStatus("পজ অবস্থায় আছে — পুনরায় চালাতে পজ বাটন চাপুন");
+    } else {
+      if (activeAudioEl) activeAudioEl.play().catch(() => {});
+      if ("speechSynthesis" in window) {
+        try { window.speechSynthesis.resume(); } catch {}
+      }
+      setPlayerStatus("পুনরায় চালু হয়েছে...");
+    }
+  }
+
+  // ---------------- UI RENDERING & FILTERS ----------------
+  let currentCategory = "soroborno";
+  let currentNamtaTable = 1;
+  let currentNumRange = "1-25";
+
+  function getCurrentFilteredItems() {
+    const base = ALL_DATA[currentCategory]?.items || [];
+    if (currentCategory === "namta") {
+      return base.filter(x => x.table === currentNamtaTable);
+    }
+    if (currentCategory === "numbers") {
+      const [start, end] = currentNumRange.split("-").map(Number);
+      return base.filter((_, idx) => (idx + 1) >= start && (idx + 1) <= end);
+    }
+    return base;
+  }
+
+  function renderSubFilters() {
+    const bar = document.getElementById("subFilterBar");
+    bar.innerHTML = "";
+
+    if (currentCategory === "namta") {
+      bar.style.display = "flex";
+      const lbl = document.createElement("span");
+      lbl.textContent = "নামতার ঘর:";
+      lbl.style.fontWeight = "700";
+      lbl.style.fontSize = "0.88rem";
+      bar.appendChild(lbl);
+
+      for (let t = 1; t <= 20; t++) {
+        const pill = document.createElement("button");
+        pill.className = "sub-pill" + (t === currentNamtaTable ? " active" : "");
+        pill.textContent = `${toBnNum(t)}-এর ঘর`;
+        pill.onclick = () => {
+          currentNamtaTable = t;
+          renderSubFilters();
+          renderCards();
+        };
+        bar.appendChild(pill);
+      }
+    } else if (currentCategory === "numbers") {
+      bar.style.display = "flex";
+      const ranges = ["1-25", "26-50", "51-75", "76-100"];
+      ranges.forEach(r => {
+        const [a, b] = r.split("-").map(Number);
+        const pill = document.createElement("button");
+        pill.className = "sub-pill" + (r === currentNumRange ? " active" : "");
+        pill.textContent = `${toBnNum(a)} - ${toBnNum(b)}`;
+        pill.onclick = () => {
+          currentNumRange = r;
+          renderSubFilters();
+          renderCards();
+        };
+        bar.appendChild(pill);
+      });
+    } else {
+      bar.style.display = "none";
+    }
+  }
+
+  function renderCards() {
+    const grid = document.getElementById("cardsGrid");
+    const items = getCurrentFilteredItems();
+    document.getElementById("currentSectionTitle").textContent = ALL_DATA[currentCategory].title;
+    grid.innerHTML = "";
+
+    items.forEach(item => {
+      const hasCustom = customVoiceCache.has(item.id);
+      const card = document.createElement("div");
+      card.className = "card";
+      card.dataset.id = item.id;
+
+      const glyphClass = (currentCategory === "arabic" || currentCategory === "surah")
+        ? "main-glyph arabic-glyph"
+        : "main-glyph";
+
+      card.innerHTML = `
+        ${hasCustom ? '<span class="badge-custom">নিজের ভয়েস</span>' : ''}
+        <div class="${glyphClass}">${item.glyph}</div>
+        <div class="title-text">${item.title}</div>
+        <div class="sub-text">${item.example}</div>
+        <div class="card-actions">
+          <button class="btn-mini btn-listen" type="button">🔊 শুনুন</button>
+          <button class="btn-mini btn-rec" type="button">🎙 রেকর্ড</button>
+        </div>
+      `;
+
+      card.addEventListener("click", (e) => {
+        if (e.target.closest(".btn-rec")) {
+          e.stopPropagation();
+          requestParentalRecord(item);
+          return;
+        }
+        if (e.target.closest(".btn-listen")) {
+          e.stopPropagation();
+          stopEverything(true);
+          playSingleItem(item, ++playbackToken);
+          return;
+        }
+        openFullscreenModal(item);
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  function selectCategory(cat) {
+    stopEverything(true);
+    currentCategory = cat;
+    document.getElementById("categorySelect").value = cat;
+    document.querySelectorAll(".q-box").forEach(b => {
+      b.classList.toggle("active", b.dataset.cat === cat);
+    });
+    renderSubFilters();
+    renderCards();
+  }
+
+  // ---------------- FULLSCREEN POPUP & RECORDING ----------------
+  let activeModalItem = null;
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let isRecordingNow = false;
+
+  function openFullscreenModal(item) {
+    stopEverything(true);
+    activeModalItem = item;
+    document.getElementById("modalGlyph").textContent = item.glyph;
+    document.getElementById("modalExample").textContent = item.example;
+    document.getElementById("modalMeaning").textContent = item.meaning;
+    document.getElementById("recStatusText").textContent = customVoiceCache.has(item.id)
+      ? "এই আইটেমে আপনার কাস্টম ভয়েস সংরক্ষিত আছে"
+      : "ডিফল্ট ভয়েস সেট করা আছে (নিজের ভয়েস দিয়ে পরিবর্তন করতে পারেন)";
+    document.getElementById("detailModal").classList.add("open");
+    playSingleItem(item, ++playbackToken);
+  }
+
+  function closeFullscreenModal() {
+    stopRecordingIfActive();
+    stopEverything(true);
+    activeModalItem = null;
+    document.getElementById("detailModal").classList.remove("open");
+  }
+
+  // Parental Gate
+  let pendingGateCallback = null;
+  let expectedMathAnswer = 7;
+
+  function requestParentalRecord(item) {
+    activeModalItem = item || activeModalItem;
+    if (!activeModalItem) return;
+    const a = Math.floor(Math.random() * 6) + 2;
+    const b = Math.floor(Math.random() * 5) + 2;
+    expectedMathAnswer = a + b;
+    document.getElementById("mathQuestionText").textContent = `${toBnNum(a)} + ${toBnNum(b)} = ?`;
+    document.getElementById("mathAnswerInput").value = "";
+    pendingGateCallback = () => startOrStopRecording(activeModalItem);
+    document.getElementById("parentalGate").classList.add("open");
+    document.getElementById("mathAnswerInput").focus();
+  }
+
+  function closeParentalGate() {
+    pendingGateCallback = null;
+    document.getElementById("parentalGate").classList.remove("open");
+  }
+
+  async function startOrStopRecording(item) {
+    if (isRecordingNow) {
+      stopRecordingIfActive();
+      return;
+    }
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      document.getElementById("recStatusText").textContent = "এই ব্রাউজারে মাইক্রোফোন রেকর্ডিং সমর্থিত নয়।";
+      return;
+    }
+
+    try {
+      stopEverything(true);
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      recordedChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      isRecordingNow = true;
+
+      const btn = document.getElementById("modalChangeVoiceBtn");
+      btn.textContent = "⏹ রেকর্ডিং বন্ধ করুন";
+      btn.classList.add("recording");
+      document.getElementById("recStatusText").textContent = "রেকর্ডিং চলছে... কথা বলুন";
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) recordedChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
+        isRecordingNow = false;
+        btn.textContent = "🎙 ভয়েস পরিবর্তন";
+        btn.classList.remove("recording");
+
+        if (recordedChunks.length > 0) {
+          const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || "audio/webm" });
+          await saveCustomVoice(item.id, blob);
+          document.getElementById("recStatusText").textContent = "নিজের ভয়েস সফলভাবে সেভ হয়েছে!";
+          renderCards();
+        } else {
+          document.getElementById("recStatusText").textContent = "কোনো অডিও রেকর্ড হয়নি।";
+        }
+      };
+
+      mediaRecorder.start();
+    } catch {
+      document.getElementById("recStatusText").textContent = "মাইক্রোফোন অনুমতি দেওয়া হয়নি।";
+    }
+  }
+
+  function stopRecordingIfActive() {
+    if (mediaRecorder && isRecordingNow) {
+      try { mediaRecorder.stop(); } catch {}
+    }
+  }
+
+  // ---------------- EVENT BINDINGS ----------------
+  document.addEventListener("DOMContentLoaded", async () => {
+    await openVoiceDB();
+    renderSubFilters();
+    renderCards();
+
+    document.getElementById("categorySelect").addEventListener("change", (e) => {
+      selectCategory(e.target.value);
+    });
+
+    document.querySelectorAll(".q-box").forEach(btn => {
+      btn.addEventListener("click", () => selectCategory(btn.dataset.cat));
+    });
+
+    document.getElementById("playAllBtn").addEventListener("click", startPlayAll);
+    document.getElementById("pauseResumeBtn").addEventListener("click", togglePauseResume);
+    document.getElementById("stopAllBtn").addEventListener("click", () => stopEverything(true));
+
+    document.getElementById("closeModalBtn").addEventListener("click", closeFullscreenModal);
+    document.getElementById("detailModal").addEventListener("click", (e) => {
+      if (e.target.id === "detailModal") closeFullscreenModal();
+    });
+
+    document.getElementById("modalPlayVoiceBtn").addEventListener("click", () => {
+      if (!activeModalItem) return;
+      stopEverything(true);
+      playSingleItem(activeModalItem, ++playbackToken);
+    });
+
+    document.getElementById("modalChangeVoiceBtn").addEventListener("click", () => {
+      if (!activeModalItem) return;
+      requestParentalRecord(activeModalItem);
+    });
+
+    document.getElementById("confirmGateBtn").addEventListener("click", () => {
+      const val = Number(document.getElementById("mathAnswerInput").value);
+      if (val === expectedMathAnswer) {
+        const cb = pendingGateCallback;
+        closeParentalGate();
+        if (cb) cb();
+      } else {
+        alert("ভুল উত্তর! সঠিক যোগফল লিখুন।");
+      }
+    });
+
+    document.getElementById("cancelGateBtn").addEventListener("click", closeParentalGate);
+
+    document.getElementById("resetAllVoicesBtn").addEventListener("click", async () => {
+      if (confirm("সব কাস্টম ভয়েস মুছে ডিফল্ট ভয়েসে ফিরতে চান?")) {
+        await clearAllCustomVoices();
+        renderCards();
+        setPlayerStatus("সব আইটেম ডিফল্ট ভয়েসে ফিরে এসেছে");
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
