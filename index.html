@@ -297,6 +297,13 @@
     cursor: pointer;
     margin-bottom: 10px;
   }
+  .voice-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 4px;
+  }
   .change-voice-btn {
     display: inline-block;
     padding: 7px 14px;
@@ -417,7 +424,11 @@
     <div class="modal-meaning" id="modalMeaning">স্বরবর্ণের প্রথম বর্ণ</div>
 
     <button class="own-voice-btn" id="modalPlayVoiceBtn">🔊 নিজের ভয়েস</button>
-    <button class="change-voice-btn" id="modalChangeVoiceBtn">🎙 ভয়েস পরিবর্তন</button>
+    <div class="voice-actions-row">
+      <button class="change-voice-btn" id="modalChangeVoiceBtn">🎙 ভয়েস পরিবর্তন</button>
+      <button class="change-voice-btn" id="modalUploadVoiceBtn">📁 অডিও ফাইল যুক্ত করুন</button>
+    </div>
+    <input type="file" id="voiceFileInput" accept="audio/*" style="display:none;" />
     <div class="rec-status" id="recStatusText"></div>
   </div>
 </div>
@@ -558,14 +569,6 @@
     lang: "en-US"
   }));
 
-  const ARABIC_RAW = [
-    ["ا","আলিফ"],["ب","বা"],["ت","তা"],["ث","ছা"],["ج","জিম"],["ح","হা"],["خ","খ"],
-    ["দ","দাল"],["ذ","যাল"],["র","রা"],["য","যা"],["স","সিন"],["শ","শিন"],["স","সোয়াদ"],
-    ["দ","দোয়াদ"],["ত","ত্বা"],["জ","যোয়া"],["আইন","আইন"],["গাইন","গাইন"],["ফ","ফা"],
-    ["ক","ক্বাফ"],["ক","কাফ"],["ল","লাম"],["ম","মিম"],["ন","নুন"],["ও","ওয়াও"],["হ","হা"],
-    ["হামজা","হামজা"],["ই","ইয়া"]
-  ];
-  // Use proper distinct Arabic letters
   const ARABIC_LETTERS = [
     ["ا","আলিফ"],["ب","বা"],["ت","তা"],["ث","ছা"],["ج","জিম"],["ح","হা"],["خ","খ"],
     ["د","দাল"],["ذ","যাল"],["ر","রা"],["ز","যা"],["س","সিন"],["ش","শিন"],["ص","সোয়াদ"],
@@ -707,69 +710,139 @@
     surah: { title: "কোরআনের সূরা (সূরা ফাতিহা ও শেষ ১০ সূরা)", items: SURAHS }
   };
 
-  // ---------------- INDEXEDDB FOR CUSTOM VOICES ----------------
+  // ---------------- VOICE STORAGE (IndexedDB + localStorage Fallback) ----------------
   const DB_NAME = "KidsVoiceAppDB";
   const STORE_NAME = "customVoices";
+  const LS_PREFIX = "kids_custom_voice_b64_";
   let db = null;
   const customVoiceCache = new Map(); // id -> Blob
 
+  function blobToDataUrl(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  function dataUrlToBlob(dataUrl) {
+    const parts = dataUrl.split(",");
+    if (parts.length < 2) return null;
+    const mimeMatch = parts[0].match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : "audio/webm";
+    const binary = atob(parts[1]);
+    const len = binary.length;
+    const u8 = new Uint8Array(len);
+    for (let i = 0; i < len; i++) u8[i] = binary.charCodeAt(i);
+    return new Blob([u8], { type: mime });
+  }
+
+  function loadVoicesFromLocalStorage() {
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(LS_PREFIX)) {
+          const itemId = key.slice(LS_PREFIX.length);
+          const val = localStorage.getItem(key);
+          if (val) {
+            const b = dataUrlToBlob(val);
+            if (b && b.size > 0) customVoiceCache.set(itemId, b);
+          }
+        }
+      }
+    } catch {}
+  }
+
   function openVoiceDB() {
+    loadVoicesFromLocalStorage();
     return new Promise((resolve) => {
       if (!("indexedDB" in window)) return resolve(null);
-      const req = indexedDB.open(DB_NAME, 1);
-      req.onupgradeneeded = (e) => {
-        const database = e.target.result;
-        if (!database.objectStoreNames.contains(STORE_NAME)) {
-          database.createObjectStore(STORE_NAME);
-        }
-      };
-      req.onsuccess = async (e) => {
-        db = e.target.result;
-        await loadAllCustomVoicesToCache();
-        resolve(db);
-      };
-      req.onerror = () => resolve(null);
+      try {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = (e) => {
+          const database = e.target.result;
+          if (!database.objectStoreNames.contains(STORE_NAME)) {
+            database.createObjectStore(STORE_NAME);
+          }
+        };
+        req.onsuccess = async (e) => {
+          db = e.target.result;
+          await loadAllCustomVoicesToCache();
+          resolve(db);
+        };
+        req.onerror = () => resolve(null);
+      } catch {
+        resolve(null);
+      }
     });
   }
 
   function loadAllCustomVoicesToCache() {
     return new Promise((resolve) => {
       if (!db) return resolve();
-      const tx = db.transaction(STORE_NAME, "readonly");
-      const store = tx.objectStore(STORE_NAME);
-      const cursorReq = store.openCursor();
-      cursorReq.onsuccess = (e) => {
-        const cursor = e.target.result;
-        if (cursor) {
-          customVoiceCache.set(cursor.key, cursor.value);
-          cursor.continue();
-        } else {
-          resolve();
-        }
-      };
-      cursorReq.onerror = () => resolve();
+      try {
+        const tx = db.transaction(STORE_NAME, "readonly");
+        const store = tx.objectStore(STORE_NAME);
+        const cursorReq = store.openCursor();
+        cursorReq.onsuccess = (e) => {
+          const cursor = e.target.result;
+          if (cursor) {
+            if (cursor.value && cursor.value.size > 0) {
+              customVoiceCache.set(cursor.key, cursor.value);
+            }
+            cursor.continue();
+          } else {
+            resolve();
+          }
+        };
+        cursorReq.onerror = () => resolve();
+      } catch {
+        resolve();
+      }
     });
   }
 
-  function saveCustomVoice(id, blob) {
+  async function saveCustomVoice(id, blob) {
+    if (!blob || blob.size === 0) return;
     customVoiceCache.set(id, blob);
-    if (!db) return Promise.resolve();
+    try {
+      const dataUrl = await blobToDataUrl(blob);
+      localStorage.setItem(LS_PREFIX + id, dataUrl);
+    } catch {}
+    if (!db) return;
     return new Promise((resolve) => {
-      const tx = db.transaction(STORE_NAME, "readwrite");
-      tx.objectStore(STORE_NAME).put(blob, id);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => resolve();
+      try {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.objectStore(STORE_NAME).put(blob, id);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+      } catch {
+        resolve();
+      }
     });
   }
 
-  function clearAllCustomVoices() {
+  async function clearAllCustomVoices() {
     customVoiceCache.clear();
-    if (!db) return Promise.resolve();
+    try {
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(LS_PREFIX)) keysToRemove.push(k);
+      }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
+    } catch {}
+    if (!db) return;
     return new Promise((resolve) => {
-      const tx = db.transaction(STORE_NAME, "readwrite");
-      tx.objectStore(STORE_NAME).clear();
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => resolve();
+      try {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.objectStore(STORE_NAME).clear();
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+      } catch {
+        resolve();
+      }
     });
   }
 
@@ -801,8 +874,8 @@
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = "sine";
-        osc.frequency.setValueAtTime(523.25, now); // C5
-        osc.frequency.exponentialRampToValueAtTime(659.25, now + durationSec * 0.6); // E5
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.exponentialRampToValueAtTime(659.25, now + durationSec * 0.6);
         gain.gain.setValueAtTime(0.08, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + durationSec);
         osc.connect(gain);
@@ -904,7 +977,6 @@
       return;
     }
 
-    // Default built-in voice (TTS + gentle musical feedback so never silent)
     const textToSpeak = item.speakBn || item.speakAr || item.speakEn || item.example || item.title;
     const lang = item.lang || "bn-BD";
     await Promise.all([
@@ -1073,7 +1145,7 @@
       card.addEventListener("click", (e) => {
         if (e.target.closest(".btn-rec")) {
           e.stopPropagation();
-          requestParentalRecord(item);
+          requestParentalAction(item, () => startOrStopRecording(item));
           return;
         }
         if (e.target.closest(".btn-listen")) {
@@ -1100,7 +1172,7 @@
     renderCards();
   }
 
-  // ---------------- FULLSCREEN POPUP & RECORDING ----------------
+  // ---------------- FULLSCREEN POPUP, RECORDING & AUDIO UPLOAD ----------------
   let activeModalItem = null;
   let mediaRecorder = null;
   let recordedChunks = [];
@@ -1114,7 +1186,7 @@
     document.getElementById("modalMeaning").textContent = item.meaning;
     document.getElementById("recStatusText").textContent = customVoiceCache.has(item.id)
       ? "এই আইটেমে আপনার কাস্টম ভয়েস সংরক্ষিত আছে"
-      : "ডিফল্ট ভয়েস সেট করা আছে (নিজের ভয়েস দিয়ে পরিবর্তন করতে পারেন)";
+      : "ডিফল্ট ভয়েস সেট করা আছে (নিজের ভয়েস রেকর্ড বা অডিও ফাইল যুক্ত করতে পারেন)";
     document.getElementById("detailModal").classList.add("open");
     playSingleItem(item, ++playbackToken);
   }
@@ -1130,15 +1202,15 @@
   let pendingGateCallback = null;
   let expectedMathAnswer = 7;
 
-  function requestParentalRecord(item) {
+  function requestParentalAction(item, actionFn) {
     activeModalItem = item || activeModalItem;
-    if (!activeModalItem) return;
+    if (!activeModalItem || typeof actionFn !== "function") return;
     const a = Math.floor(Math.random() * 6) + 2;
     const b = Math.floor(Math.random() * 5) + 2;
     expectedMathAnswer = a + b;
     document.getElementById("mathQuestionText").textContent = `${toBnNum(a)} + ${toBnNum(b)} = ?`;
     document.getElementById("mathAnswerInput").value = "";
-    pendingGateCallback = () => startOrStopRecording(activeModalItem);
+    pendingGateCallback = actionFn;
     document.getElementById("parentalGate").classList.add("open");
     document.getElementById("mathAnswerInput").focus();
   }
@@ -1148,52 +1220,140 @@
     document.getElementById("parentalGate").classList.remove("open");
   }
 
+  function pickRecorderMimeType() {
+    if (typeof MediaRecorder === "undefined" || !MediaRecorder.isTypeSupported) return "";
+    const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg"];
+    for (const t of candidates) {
+      if (MediaRecorder.isTypeSupported(t)) return t;
+    }
+    return "";
+  }
+
+
+  // ---------------- CHROME MICROPHONE PERMISSION ENGINE ----------------
+  let activeMicStream = null;
+  let micPermissionState = "unknown";
+
+  async function checkMicrophonePermissionState() {
+    if (navigator.permissions && navigator.permissions.query) {
+      try {
+        const status = await navigator.permissions.query({ name: "microphone" });
+        micPermissionState = status.state;
+        status.onchange = () => {
+          micPermissionState = status.state;
+          updateMicPermissionBanner();
+        };
+      } catch {}
+    }
+    updateMicPermissionBanner();
+  }
+
+  function updateMicPermissionBanner() {
+    const engineEl = document.getElementById("voiceEngineStatus");
+    if (!engineEl) return;
+    if (micPermissionState === "granted") {
+      engineEl.textContent = "মাইক্রোফোন অনুমতি দেওয়া আছে (Chrome Ready) — যেকোনো কার্ডে ট্যাপ করুন";
+    } else if (micPermissionState === "denied") {
+      engineEl.textContent = "Chrome-এ মাইক্রোফোন ব্লক করা আছে — অ্যাড্রেস বারের 🔒 / সাইট সেটিংস থেকে Allow করুন";
+    }
+  }
+
+  async function requestChromeMicrophoneStream() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error("UNSUPPORTED_MEDIA_DEVICES");
+    }
+
+    const constraintsList = [
+      { audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } },
+      { audio: true }
+    ];
+
+    let lastErr = null;
+    for (const constraints of constraintsList) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        micPermissionState = "granted";
+        updateMicPermissionBanner();
+        return stream;
+      } catch (err) {
+        lastErr = err;
+        if (err && (err.name === "NotAllowedError" || err.name === "PermissionDeniedError")) {
+          micPermissionState = "denied";
+          updateMicPermissionBanner();
+          break;
+        }
+      }
+    }
+    throw lastErr || new Error("MIC_STREAM_FAILED");
+  }
+
   async function startOrStopRecording(item) {
     if (isRecordingNow) {
       stopRecordingIfActive();
       return;
     }
 
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      document.getElementById("recStatusText").textContent = "এই ব্রাউজারে মাইক্রোফোন রেকর্ডিং সমর্থিত নয়।";
+    if (typeof MediaRecorder === "undefined") {
+      document.getElementById("recStatusText").textContent =
+        "এই ব্রাউজারে MediaRecorder নেই—পাশের 'অডিও ফাইল যুক্ত করুন' বাটন দিয়ে অডিও যুক্ত করতে পারেন।";
       return;
     }
 
     try {
       stopEverything(true);
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      document.getElementById("recStatusText").textContent = "Chrome-এ মাইক্রোফোন অনুমতি চাওয়া হচ্ছে... অনুগ্রহ করে Allow চাপুন।";
+      const stream = await requestChromeMicrophoneStream();
+      activeMicStream = stream;
       recordedChunks = [];
-      mediaRecorder = new MediaRecorder(stream);
+      const mimeType = pickRecorderMimeType();
+      mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
       isRecordingNow = true;
 
       const btn = document.getElementById("modalChangeVoiceBtn");
       btn.textContent = "⏹ রেকর্ডিং বন্ধ করুন";
       btn.classList.add("recording");
-      document.getElementById("recStatusText").textContent = "রেকর্ডিং চলছে... কথা বলুন";
+      document.getElementById("recStatusText").textContent = "মাইক্রোফোন চালু হয়েছে! রেকর্ডিং চলছে... কথা বলে 'রেকর্ডিং বন্ধ করুন' চাপুন";
 
       mediaRecorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) recordedChunks.push(e.data);
       };
 
       mediaRecorder.onstop = async () => {
-        stream.getTracks().forEach(t => t.stop());
+        if (activeMicStream) {
+          activeMicStream.getTracks().forEach(t => t.stop());
+          activeMicStream = null;
+        }
         isRecordingNow = false;
         btn.textContent = "🎙 ভয়েস পরিবর্তন";
         btn.classList.remove("recording");
 
         if (recordedChunks.length > 0) {
-          const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || "audio/webm" });
+          const finalType = mediaRecorder.mimeType || mimeType || "audio/webm";
+          const blob = new Blob(recordedChunks, { type: finalType });
           await saveCustomVoice(item.id, blob);
-          document.getElementById("recStatusText").textContent = "নিজের ভয়েস সফলভাবে সেভ হয়েছে!";
+          document.getElementById("recStatusText").textContent = "নিজের ভয়েস সফলভাবে সেভ হয়েছে! এখন 'নিজের ভয়েস' চাপুন।";
           renderCards();
         } else {
-          document.getElementById("recStatusText").textContent = "কোনো অডিও রেকর্ড হয়নি।";
+          document.getElementById("recStatusText").textContent = "কোনো অডিও রেকর্ড হয়নি। আবার চেষ্টা করুন।";
         }
       };
 
       mediaRecorder.start();
-    } catch {
-      document.getElementById("recStatusText").textContent = "মাইক্রোফোন অনুমতি দেওয়া হয়নি।";
+    } catch (err) {
+      if (activeMicStream) {
+        activeMicStream.getTracks().forEach(t => t.stop());
+        activeMicStream = null;
+      }
+      const isHttpsOrLocal = location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1";
+      let reason = "মাইক্রোফোন চালু করা যায়নি ('অডিও ফাইল যুক্ত করুন' ব্যবহার করতে পারেন)।";
+      if (!isHttpsOrLocal) {
+        reason = "Chrome মাইক্রোফোন অনুমতির জন্য HTTPS (যেমন GitHub Pages) বা localhost প্রয়োজন। GitHub Pages চালু করুন অথবা 'অডিও ফাইল যুক্ত করুন' ব্যবহার করুন।";
+      } else if (err && (err.name === "NotAllowedError" || err.name === "PermissionDeniedError")) {
+        reason = "Chrome-এ মাইক্রোফোন অনুমতি ব্লক করা আছে! অ্যাড্রেস বারের বামে Lock/Tune আইকন → Site settings → Microphone → Allow করে রিলোড দিন।";
+      } else if (err && err.name === "NotFoundError") {
+        reason = "ডিভাইসে কোনো মাইক্রোফোন পাওয়া যায়নি—'অডিও ফাইল যুক্ত করুন' দিয়ে অডিও সেট করতে পারেন।";
+      }
+      document.getElementById("recStatusText").textContent = reason;
     }
   }
 
@@ -1206,6 +1366,7 @@
   // ---------------- EVENT BINDINGS ----------------
   document.addEventListener("DOMContentLoaded", async () => {
     await openVoiceDB();
+    await checkMicrophonePermissionState();
     renderSubFilters();
     renderCards();
 
@@ -1234,7 +1395,25 @@
 
     document.getElementById("modalChangeVoiceBtn").addEventListener("click", () => {
       if (!activeModalItem) return;
-      requestParentalRecord(activeModalItem);
+      requestParentalAction(activeModalItem, () => startOrStopRecording(activeModalItem));
+    });
+
+    const fileInput = document.getElementById("voiceFileInput");
+    document.getElementById("modalUploadVoiceBtn").addEventListener("click", () => {
+      if (!activeModalItem) return;
+      requestParentalAction(activeModalItem, () => {
+        fileInput.value = "";
+        fileInput.click();
+      });
+    });
+
+    fileInput.addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file || !activeModalItem) return;
+      const blob = new Blob([await file.arrayBuffer()], { type: file.type || "audio/mpeg" });
+      await saveCustomVoice(activeModalItem.id, blob);
+      document.getElementById("recStatusText").textContent = "অডিও ফাইল সফলভাবে নিজের ভয়েস হিসেবে সেভ হয়েছে!";
+      renderCards();
     });
 
     document.getElementById("confirmGateBtn").addEventListener("click", () => {
