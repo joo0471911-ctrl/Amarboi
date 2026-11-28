@@ -741,7 +741,7 @@
     /* অক্ষর উপরে, নিচের বাটনগুলো কম্প্যাক্ট ও একদম নিচে */
     .modal-card:not(.surah-fullscreen-mode) { row-gap: 6px; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
     .modal-card:not(.surah-fullscreen-mode) .modal-content-pane { justify-content: flex-end; gap: clamp(8px, 1.8dvh, 16px); padding-top: 0; }
-    .modal-card:not(.surah-fullscreen-mode) .modal-glyph-row { flex: 1 1 auto; min-height: 0; padding: 4px 0; }
+    .modal-card:not(.surah-fullscreen-mode) .modal-glyph-row { flex: 1 1 auto; min-height: 0; padding: 10px 0; }
     .modal-card:not(.surah-fullscreen-mode) #prevWordBtn,
     .modal-card:not(.surah-fullscreen-mode) #nextWordBtn,
     .modal-card:not(.surah-fullscreen-mode) .own-voice-btn { height: 46px; border-radius: 14px; }
@@ -754,6 +754,350 @@
     .modal-card:not(.surah-fullscreen-mode) .modal-headline { font-size: clamp(30px, 11.5vw, 54px); }
     .modal-card:not(.surah-fullscreen-mode) .modal-subline { font-size: clamp(20px, 6.8vw, 32px); }
     .modal-card:not(.surah-fullscreen-mode) .modal-meaning { font-size: clamp(17px, 5.4vw, 24px); }
+  }
+
+  /* ===== অফলাইন সাউন্ড স্ট্যাটাস চিপ ও সহায়তা ডায়ালগ ===== */
+  .control-panel .section-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .offline-chip { border: 1px solid #a7f3d0; background: #ecfdf5; color: #047857; font: inherit; font-size: 0.74rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; cursor: pointer; }
+  .offline-chip.warn { border-color: #fcd34d; background: #fffbeb; color: #92400e; }
+  .offline-chip.pulse { animation: chipPulse 0.9s ease 2; }
+  @keyframes chipPulse { 50% { transform: scale(1.08); box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25); } }
+  .offline-dlg-backdrop { position: fixed; inset: 0; z-index: 1100; background: rgba(2, 6, 23, 0.72); display: flex; align-items: center; justify-content: center; padding: 12px; }
+  .offline-dlg { background: #fff; color: var(--text); width: 100%; max-width: 480px; max-height: 92vh; max-height: 92dvh; overflow-y: auto; border-radius: 18px; padding: 16px 16px 14px; box-shadow: var(--shadow-lg); }
+  .offline-dlg h2 { font-size: 1.08rem; font-weight: 800; margin-bottom: 8px; }
+  .offline-dlg h3 { font-size: 0.9rem; font-weight: 800; margin: 12px 0 6px; color: var(--primary-deep); }
+  .offline-dlg p, .offline-dlg li { font-size: 0.86rem; line-height: 1.55; color: var(--text-secondary); }
+  .offline-dlg ol { padding-left: 20px; }
+  .offline-dlg li { margin-bottom: 4px; }
+  .vrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 6px; font-size: 0.86rem; font-weight: 700; color: var(--text); }
+  .vrow span.s { font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; }
+  .vrow button, .offline-dlg .close-dlg { border: 0; border-radius: 10px; font: inherit; font-weight: 800; cursor: pointer; }
+  .vrow button { background: #dbeafe; color: #1e40af; padding: 7px 12px; font-size: 0.8rem; }
+  .offline-dlg .close-dlg { width: 100%; margin-top: 12px; background: var(--primary); color: #fff; padding: 11px; font-size: 0.95rem; }
+
+  /* ===== ছড়ার মডাল ===== */
+  .modal-glyph:empty { display: none; }
+  .modal-glyph-row { overflow: hidden; }
+  .modal-emoji .em-in { display: inline-block; }
+  .rhyme-line { display: block; padding: 1px 8px; border-radius: 10px; transition: background 0.2s, color 0.2s; }
+  .rhyme-line.reading-active { background: #fef3c7; color: #b45309; }
+  .modal-card.rhyme-mode:not(.surah-fullscreen-mode) .modal-headline { font-size: clamp(22px, 7vw, 34px); }
+  .modal-card.rhyme-mode:not(.surah-fullscreen-mode) .modal-subline { font-size: clamp(16px, 4.7vw, 22px); line-height: 1.5; margin-top: 6px; white-space: normal; text-align: center; }
+  .modal-card.rhyme-mode:not(.surah-fullscreen-mode) .modal-example { padding: 12px 8px; }
+  .modal-card.rhyme-mode .modal-emoji { font-size: min(34vw, 20dvh, 150px); }
+
+  /* ===== অক্ষরের পাশের ছবির মোশন: প্রতিটি ছবি নিজের স্বভাবে আসে ===== */
+  @media (prefers-reduced-motion: no-preference) {
+    .modal-glyph.pop { animation: glyphPop 0.6s cubic-bezier(0.2, 1.5, 0.4, 1) both; }
+    @keyframes glyphPop { 0% { transform: scale(0.55); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+    /* অজগর: বেঁকে বেঁকে ডান থেকে তেড়ে আসে */
+    .mo-slither { animation: moSlither 2s cubic-bezier(0.25, 0.6, 0.35, 1) both; }
+    .mo-slither .em-in { animation: moWiggle 1.2s ease-in-out 2s infinite; }
+    @keyframes moSlither {
+      0% { transform: translate(43.4vw, 0) rotate(0) scale(0.85); opacity: 0; }
+      8% { opacity: 1; }
+      22% { transform: translate(31vw, -22px) rotate(-16deg); }
+      36% { transform: translate(21.1vw, 18px) rotate(14deg); }
+      50% { transform: translate(13vw, -18px) rotate(-12deg); }
+      64% { transform: translate(6.8vw, 14px) rotate(10deg); }
+      78% { transform: translate(2.5vw, -8px) rotate(-6deg); }
+      90% { transform: translate(-1.9vw, 0) rotate(4deg) scale(1.14); }
+      100% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
+    }
+    @keyframes moWiggle { 0%, 100% { transform: rotate(-5deg) translateY(0); } 50% { transform: rotate(6deg) translateY(-6px); } }
+
+    /* পাখি/ঈগল: ডানা ঝাপটে আকাশ থেকে নেমে আসে */
+    .mo-fly { animation: moFly 2.2s cubic-bezier(0.3, 0.5, 0.3, 1) both, moHover 2.4s ease-in-out 2.2s infinite; }
+    .mo-fly .em-in { animation: moFlap 0.4s ease-in-out infinite alternate; transform-origin: 50% 60%; }
+    @keyframes moFly {
+      0% { transform: translate(46.5vw, -15vh) scale(0.45) rotate(8deg); opacity: 0; }
+      10% { opacity: 1; }
+      30% { transform: translate(27.9vw, -4vh) scale(0.7) rotate(-6deg); }
+      48% { transform: translate(14.9vw, -16px) scale(0.95) rotate(7deg); }
+      64% { transform: translate(6.2vw, -34px) scale(1) rotate(-5deg); }
+      80% { transform: translate(1.2vw, 6px) scale(1.08) rotate(3deg); }
+      100% { transform: translate(0, 0) scale(1) rotate(0); opacity: 1; }
+    }
+    @keyframes moFlap { 0% { transform: scaleY(1) skewX(0deg); } 100% { transform: scaleY(0.78) skewX(-6deg); } }
+    @keyframes moHover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+    /* ব্যাঙ/খরগোশ/ভেড়া/ছাগল: লাফিয়ে লাফিয়ে আসে */
+    .mo-hop { animation: moHop 2.1s both; }
+    .mo-hop .em-in { animation: moHopIdle 1.8s ease-in-out 2.1s infinite; }
+    @keyframes moHop {
+      0% { transform: translate(43.4vw, 0); opacity: 0; }
+      6% { opacity: 1; }
+      15% { transform: translate(36vw, -70px); animation-timing-function: ease-in; }
+      25% { transform: translate(28.5vw, 0) scale(1.12, 0.86); }
+      40% { transform: translate(19.8vw, -60px); animation-timing-function: ease-in; }
+      50% { transform: translate(13.6vw, 0) scale(1.12, 0.86); }
+      65% { transform: translate(7.4vw, -48px); animation-timing-function: ease-in; }
+      75% { transform: translate(2.5vw, 0) scale(1.1, 0.88); }
+      88% { transform: translate(0, -26px); animation-timing-function: ease-in; }
+      100% { transform: translate(0, 0) scale(1); opacity: 1; }
+    }
+    @keyframes moHopIdle { 0%, 60%, 100% { transform: translateY(0); } 70% { transform: translateY(-22px) scaleY(1.08); } 80% { transform: translateY(0) scale(1.1, 0.9); } }
+
+    /* সিংহ/বাঘ/বিড়াল: গুটিগুটি এগিয়ে তারপর ঝাঁপ */
+    .mo-pounce { animation: moPounce 2.2s both; }
+    .mo-pounce .em-in { animation: moBreath 2s ease-in-out 2.2s infinite; }
+    @keyframes moPounce {
+      0% { transform: translate(43.4vw, 0) scale(1, 0.92); opacity: 0; }
+      8% { opacity: 1; }
+      55% { transform: translate(16.1vw, 4px) scale(1.04, 0.9); }
+      72% { transform: translate(8.7vw, 6px) scale(1.06, 0.88); }
+      84% { transform: translate(2.5vw, -60px) scale(1.12, 1.05) rotate(-6deg); }
+      93% { transform: translate(0, 2px) scale(1.18, 0.84); }
+      100% { transform: translate(0, 0) scale(1); opacity: 1; }
+    }
+    @keyframes moBreath { 0%, 100% { transform: scale(1) rotate(-1.5deg); } 50% { transform: scale(1.05) rotate(1.5deg); } }
+
+    /* ঘোড়া/হরিণ/চিতা/ইঁদুর/কুকুর/জেব্রা: ছুটে আসে */
+    .mo-gallop { animation: moGallop 1.7s cubic-bezier(0.2, 0.6, 0.3, 1) both; }
+    .mo-gallop .em-in { animation: moTrot 0.5s ease-in-out 1.7s infinite alternate; }
+    @keyframes moGallop {
+      0% { transform: translate(46.5vw, 0); opacity: 0; }
+      6% { opacity: 1; }
+      12% { transform: translate(39.1vw, -18px) rotate(-5deg); }
+      20% { transform: translate(32.2vw, 0) rotate(2deg); }
+      28% { transform: translate(26vw, -18px) rotate(-5deg); }
+      36% { transform: translate(20.5vw, 0) rotate(2deg); }
+      44% { transform: translate(14.9vw, -18px) rotate(-5deg); }
+      52% { transform: translate(10.5vw, 0) rotate(2deg); }
+      60% { transform: translate(6.8vw, -14px) rotate(-4deg); }
+      70% { transform: translate(3.7vw, 0); }
+      80% { transform: translate(1.2vw, -8px) rotate(-2deg); }
+      90% { transform: translate(-1.2vw, 0) rotate(3deg); }
+      100% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    }
+    @keyframes moTrot { 0% { transform: translateY(0) rotate(-2deg); } 100% { transform: translateY(-6px) rotate(2deg); } }
+
+    /* হাতি/গরু/ভালুক/উট/ষাঁড়: ধপ ধপ করে হেঁটে আসে */
+    .mo-stomp { animation: moStomp 2.6s both; }
+    .mo-stomp .em-in { animation: moBreathSlow 2.6s ease-in-out 2.6s infinite; }
+    @keyframes moStomp {
+      0% { transform: translate(43.4vw, 0); opacity: 0; }
+      6% { opacity: 1; }
+      15% { transform: translate(36vw, 0) rotate(-5deg); }
+      25% { transform: translate(29.8vw, 6px) rotate(4deg); }
+      35% { transform: translate(23.6vw, 0) rotate(-5deg); }
+      45% { transform: translate(18vw, 6px) rotate(4deg); }
+      55% { transform: translate(13vw, 0) rotate(-4deg); }
+      65% { transform: translate(8.7vw, 5px) rotate(3deg); }
+      75% { transform: translate(4.3vw, 0) rotate(-3deg); }
+      85% { transform: translate(1.2vw, 6px) rotate(2deg); }
+      92% { transform: translate(0, 10px) scale(1.06, 0.94); }
+      100% { transform: translate(0, 0) scale(1); opacity: 1; }
+    }
+    @keyframes moBreathSlow { 0%, 100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.04) rotate(2deg); } }
+
+    /* মাছ/তিমি: ঢেউ খেলে সাঁতরে আসে */
+    .mo-swim { animation: moSwim 2.2s ease-out both; }
+    .mo-swim .em-in { animation: moTail 0.8s ease-in-out infinite alternate; }
+    @keyframes moSwim {
+      0% { transform: translate(43.4vw, 10px) rotate(0); opacity: 0; }
+      8% { opacity: 1; }
+      25% { transform: translate(29.8vw, -20px) rotate(-8deg); }
+      45% { transform: translate(16.1vw, 18px) rotate(8deg); }
+      65% { transform: translate(6.2vw, -14px) rotate(-6deg); }
+      85% { transform: translate(1.2vw, 8px) rotate(4deg); }
+      100% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    }
+    @keyframes moTail { 0% { transform: skewX(-8deg) translateY(-4px); } 100% { transform: skewX(8deg) translateY(4px); } }
+
+    /* আম/আপেল/বল ইত্যাদি: উপর থেকে টুপ করে পড়ে লাফায় */
+    .mo-drop { animation: moDrop 1.9s both; }
+    .mo-drop .em-in { animation: moJelly 1.6s ease-in-out 1.9s infinite; }
+    @keyframes moDrop {
+      0% { transform: translateY(-35vh) rotate(-30deg); opacity: 0; animation-timing-function: ease-in; }
+      10% { opacity: 1; }
+      42% { transform: translateY(0) rotate(10deg) scale(1.12, 0.84); animation-timing-function: ease-out; }
+      55% { transform: translateY(-70px) rotate(-6deg) scale(0.95, 1.08); animation-timing-function: ease-in; }
+      68% { transform: translateY(0) rotate(3deg) scale(1.1, 0.88); animation-timing-function: ease-out; }
+      78% { transform: translateY(-26px) scale(0.98, 1.03); animation-timing-function: ease-in; }
+      88% { transform: translateY(0) scale(1.05, 0.95); }
+      100% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+    }
+    @keyframes moJelly { 0%, 100% { transform: scale(1, 1); } 40% { transform: scale(1.05, 0.95); } 70% { transform: scale(0.97, 1.04); } }
+
+    /* ফুল/ধান/পাহাড়: মাটি থেকে গজিয়ে ওঠে, বাতাসে দোলে */
+    .mo-grow { animation: moGrow 1.6s cubic-bezier(0.2, 0.9, 0.3, 1) both; transform-origin: 50% 100%; }
+    .mo-grow .em-in { animation: moSway 2.4s ease-in-out 1.6s infinite alternate; transform-origin: 50% 100%; }
+    @keyframes moGrow {
+      0% { transform: translateY(40px) scale(0) rotate(-20deg); opacity: 0; }
+      55% { transform: translateY(0) scale(1.18) rotate(8deg); opacity: 1; }
+      75% { transform: scale(0.95) rotate(-4deg); }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    @keyframes moSway { 0% { transform: rotate(-7deg); } 100% { transform: rotate(7deg); } }
+
+    /* সূর্য/চাঁদ/ভোর: নিচ থেকে উঠে আসে, আলো ছড়ায় */
+    .mo-rise { animation: moRise 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
+    .mo-rise .em-in { animation: moGlow 2.6s ease-in-out 2.2s infinite; }
+    @keyframes moRise {
+      0% { transform: translateY(30vh) scale(0.6); opacity: 0; filter: drop-shadow(0 0 0 rgba(255, 190, 0, 0)); }
+      20% { opacity: 1; }
+      70% { transform: translateY(-14px) scale(1.12); filter: drop-shadow(0 0 10px rgba(255, 190, 0, 0.6)); }
+      100% { transform: translateY(0) scale(1); opacity: 1; filter: drop-shadow(0 0 6px rgba(255, 190, 0, 0.4)); }
+    }
+    @keyframes moGlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+
+    /* কলম/পেন্সিল: লিখতে লিখতে আসে */
+    .mo-write { animation: moWrite 2.2s both; }
+    .mo-write .em-in { animation: moScribble 1.1s ease-in-out 2.2s infinite alternate; }
+    @keyframes moWrite {
+      0% { transform: translate(37.2vw, -3vh) rotate(-60deg); opacity: 0; }
+      10% { opacity: 1; }
+      20% { transform: translate(24.8vw, 10px) rotate(-30deg); }
+      30% { transform: translate(21.1vw, -20px) rotate(-52deg); }
+      40% { transform: translate(17.4vw, 12px) rotate(-30deg); }
+      50% { transform: translate(13.6vw, -20px) rotate(-52deg); }
+      60% { transform: translate(9.3vw, 12px) rotate(-30deg); }
+      70% { transform: translate(5.6vw, -16px) rotate(-50deg); }
+      80% { transform: translate(2.5vw, 8px) rotate(-30deg); }
+      100% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    }
+    @keyframes moScribble { 0% { transform: translateX(-6px) rotate(-5deg); } 100% { transform: translateX(6px) rotate(4deg); } }
+
+    /* খাতা/বই: পাতা উল্টে খোলে */
+    .mo-flip { animation: moFlip 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+    .mo-flip .em-in { animation: moTilt 2.4s ease-in-out 1.4s infinite alternate; }
+    @keyframes moFlip {
+      0% { transform: perspective(600px) rotateY(-90deg) scale(0.7); opacity: 0; }
+      60% { transform: perspective(600px) rotateY(20deg) scale(1.1); opacity: 1; }
+      100% { transform: perspective(600px) rotateY(0) scale(1); opacity: 1; }
+    }
+    @keyframes moTilt { 0% { transform: rotate(-4deg); } 100% { transform: rotate(4deg); } }
+
+    /* ঢোল/ঘড়ি/উৎসব/একতারা: টপ করে এসে তালে তালে নাচে */
+    .mo-beat { animation: moPop 1s both; }
+    .mo-beat .em-in { animation: moBeat 0.6s ease-in-out 1s infinite; }
+    @keyframes moBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.14); } }
+
+    /* গাড়ি/ঠেলাগাড়ি: ছুটে এসে ব্রেক কষে */
+    .mo-drive { animation: moDrive 1.5s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+    .mo-drive .em-in { animation: moBump 0.22s linear infinite alternate; }
+    @keyframes moDrive {
+      0% { transform: translate(49.6vw, 0); opacity: 0; }
+      8% { opacity: 1; }
+      70% { transform: translate(-1.2vw, 0); }
+      82% { transform: translate(-3.7vw, 0) rotate(-4deg); }
+      92% { transform: translate(0.6vw, 0) rotate(2deg); }
+      100% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    }
+    @keyframes moBump { 0% { transform: translateY(0); } 100% { transform: translateY(-2px); } }
+
+    /* জাহাজ/নৌকা: ঢেউয়ে দুলতে দুলতে আসে */
+    .mo-sail { animation: moSail 2.6s ease-in-out both; }
+    .mo-sail .em-in { animation: moRock 2.2s ease-in-out infinite alternate; transform-origin: 50% 90%; }
+    @keyframes moSail {
+      0% { transform: translate(43.4vw, 8px) rotate(2deg); opacity: 0; }
+      8% { opacity: 1; }
+      20% { transform: translate(32.2vw, -8px) rotate(-5deg); }
+      40% { transform: translate(21.1vw, 10px) rotate(5deg); }
+      60% { transform: translate(11.2vw, -8px) rotate(-4deg); }
+      80% { transform: translate(3.7vw, 8px) rotate(3deg); }
+      100% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    }
+    @keyframes moRock { 0% { transform: rotate(-6deg); } 100% { transform: rotate(6deg); } }
+
+    /* ছাতা/ঘূর্ণিঝড়/ওষুধ/থালা: ঘুরতে ঘুরতে নামে */
+    .mo-spin { animation: moSpinIn 1.6s both; }
+    .mo-spin .em-in { animation: moWobble 2s ease-in-out 1.6s infinite alternate; }
+    @keyframes moSpinIn {
+      0% { transform: translateY(-30vh) rotate(0) scale(0.5); opacity: 0; animation-timing-function: ease-in; }
+      10% { opacity: 1; }
+      45% { transform: translateY(0) rotate(540deg) scale(1.15); animation-timing-function: ease-out; }
+      70% { transform: translateY(0) rotate(700deg) scale(0.95); }
+      100% { transform: translateY(0) rotate(720deg) scale(1); opacity: 1; }
+    }
+    @keyframes moWobble { 0% { transform: rotate(-8deg); } 100% { transform: rotate(8deg); } }
+
+    /* আলু: গড়াতে গড়াতে আসে */
+    .mo-roll { animation: moRoll 2s cubic-bezier(0.25, 0.6, 0.35, 1) both; }
+    .mo-roll .em-in { animation: moWobble 2s ease-in-out 2s infinite alternate; }
+    @keyframes moRoll {
+      0% { transform: translateX(43.4vw) rotate(0); opacity: 0; }
+      8% { opacity: 1; }
+      100% { transform: translateX(0) rotate(-720deg); opacity: 1; }
+    }
+
+    /* মানুষ: হাঁটতে হাঁটতে আসে */
+    .mo-walk { animation: moWalk 2.2s both; }
+    .mo-walk .em-in { animation: moBob 0.8s ease-in-out 2.2s infinite alternate; }
+    @keyframes moWalk {
+      0% { transform: translate(40.3vw, 0); opacity: 0; }
+      8% { opacity: 1; }
+      15% { transform: translate(34.1vw, -8px) rotate(-3deg); }
+      25% { transform: translate(27.9vw, 0) rotate(3deg); }
+      35% { transform: translate(22.3vw, -8px) rotate(-3deg); }
+      45% { transform: translate(17.4vw, 0) rotate(3deg); }
+      55% { transform: translate(13vw, -8px) rotate(-3deg); }
+      65% { transform: translate(8.7vw, 0) rotate(3deg); }
+      75% { transform: translate(5vw, -8px) rotate(-2deg); }
+      85% { transform: translate(1.9vw, 0) rotate(2deg); }
+      100% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    }
+    @keyframes moBob { 0% { transform: translateY(0); } 100% { transform: translateY(-5px); } }
+
+    /* ধ্যান/ঘুম: ভেসে ভেসে আসে */
+    .mo-float { animation: moFloatIn 1.4s ease-out both; }
+    .mo-float .em-in { animation: moFloatLoop 3s ease-in-out 1.4s infinite; }
+    @keyframes moFloatIn { 0% { transform: translateY(30px) scale(0.6); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+    @keyframes moFloatLoop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+    /* তারা: ঘুরে ঘুরে ফুটে ওঠে, মিটমিট করে */
+    .mo-twinkle { animation: moStarIn 1.3s cubic-bezier(0.2, 1.2, 0.3, 1) both; }
+    .mo-twinkle .em-in { animation: moTwinkle 1.3s ease-in-out 1.3s infinite; }
+    @keyframes moStarIn { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 60% { transform: scale(1.25) rotate(15deg); opacity: 1; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+    @keyframes moTwinkle { 0%, 100% { transform: scale(1) rotate(0); filter: brightness(1); } 50% { transform: scale(1.16) rotate(8deg); filter: brightness(1.25); } }
+
+    /* হাম্পটি ডাম্পটি: দেয়ালে দোলে তারপর পড়ে যায় */
+    .mo-fall { animation: moHumpty 2.4s both; }
+    .mo-fall .em-in { animation: moJelly 1.6s ease-in-out 2.4s infinite; }
+    @keyframes moHumpty {
+      0% { transform: translateY(-14px) rotate(0); opacity: 1; }
+      12% { transform: translateY(-14px) rotate(-8deg); }
+      24% { transform: translateY(-14px) rotate(8deg); }
+      36% { transform: translateY(-14px) rotate(-12deg); }
+      48% { transform: translateY(-14px) rotate(12deg); }
+      60% { transform: translate(-6px, -14px) rotate(-18deg); }
+      72% { transform: translate(16px, 20px) rotate(70deg); animation-timing-function: ease-in; }
+      84% { transform: translate(8px, 0) rotate(200deg) scale(1.12, 0.88); animation-timing-function: ease-out; }
+      92% { transform: translate(0, -18px) rotate(330deg) scale(0.96, 1.05); }
+      100% { transform: translate(0, 0) rotate(360deg) scale(1); opacity: 1; }
+    }
+
+    /* মাকড়সা: সুতো বেয়ে উপরে ওঠে */
+    .mo-climb { animation: moClimb 2.6s both; }
+    .mo-climb .em-in { animation: moDangle 2s ease-in-out 2.6s infinite alternate; }
+    @keyframes moClimb {
+      0% { transform: translateY(30vh); opacity: 0; }
+      8% { opacity: 1; }
+      25% { transform: translate(10px, 20vh) rotate(6deg); }
+      40% { transform: translate(-10px, 15vh) rotate(-6deg); }
+      52% { transform: translate(0, 11vh); }
+      62% { transform: translate(0, 16vh) rotate(8deg); }
+      80% { transform: translate(0, 3vh) rotate(-4deg); }
+      100% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    }
+    @keyframes moDangle { 0% { transform: translateY(-8px) rotate(-5deg); } 100% { transform: translateY(8px) rotate(5deg); } }
+
+    /* বৃষ্টি: ঝাঁকি দিয়ে নামে */
+    .mo-rain { animation: moDrop 1.9s both; }
+    .mo-rain .em-in { animation: moRain 0.5s linear 1.9s infinite alternate; }
+    @keyframes moRain { 0% { transform: translateY(-3px); opacity: 0.85; } 100% { transform: translateY(3px); opacity: 1; } }
+
+    /* বাকি সব: লাফিয়ে ফুটে ওঠে */
+    .mo-pop { animation: moPop 1s both; }
+    .mo-pop .em-in { animation: moBob 2.2s ease-in-out 1s infinite alternate; }
+    @keyframes moPop {
+      0% { transform: scale(0) rotate(-12deg); opacity: 0; }
+      55% { transform: scale(1.22) rotate(6deg); opacity: 1; }
+      75% { transform: scale(0.92) rotate(-3deg); }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
   }
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -991,6 +1335,21 @@
     R.toast.classList.add('on');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { R.toast.classList.remove('on'); }, 2200);
+  }
+
+  /* লোগো মোশন: উপর থেকে পড়ে, ঘুরে, সামনে জুম হয়ে স্থির হয় */
+  var miniDropped = false;
+  function dropLogos(root, center) {
+    if (!root) return;
+    var items = root.querySelectorAll('.logo');
+    for (var k = 0; k < items.length; k++) items[k].classList.remove('drop');
+    void root.offsetWidth;
+    for (var q = 0; q < items.length; q++) {
+      var card = items[q].closest ? items[q].closest('.card') : null;
+      var idx = card ? Array.prototype.indexOf.call(root.children, card) : q;
+      items[q].style.setProperty('--i', String(Math.abs(idx - (center || 0))));
+      items[q].classList.add('drop');
+    }
   }
 
   /* ---------- লোগো (লোগো লিংক → favicon → নামের প্রথম অক্ষর) ---------- */
@@ -1444,6 +1803,7 @@
     R.mini.textContent = '';
     var n = Math.max(0, parseInt(CONFIG.miniCount, 10) || 0);
     list.slice(0, n).forEach(function (s) { R.mini.appendChild(makeLogo(s)); });
+    if (!miniDropped && R.mini.firstChild) { miniDropped = true; dropLogos(R.mini, 0); }
     if (list.length > n && n) R.mini.appendChild(h('span', { class: 'more', text: '+' + (list.length - n) }));
     R.toggle.setAttribute('aria-label', 'প্রজেক্ট হাব, ' + list.length + 'টি সাইট, ' + (R.hero.classList.contains('is-open') ? 'গুটান' : 'খুলুন'));
   }
@@ -1454,6 +1814,7 @@
     R.chev.firstChild.style.transform = open ? 'rotate(180deg)' : '';
     if (open) {
       positionPanel();
+      dropLogos(R.row, active);
       setTimeout(function () { updateArrows(); scrollCardIntoView(active); }, 60);
     }
   }
@@ -1522,6 +1883,16 @@
     '.logo{width:74px;height:74px;border-radius:50%;background:transparent;display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;border:2px solid rgba(255,255,255,.55);box-shadow:0 8px 18px rgba(0,0,0,.45)}',
     '.logo img{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%}',
     '.logo.is-mono{background:var(--a,#22FF88);padding:0}',
+    '.logo.drop{animation:hubLogoDrop 1.9s backwards;animation-delay:calc(var(--i,0)*.12s);will-change:transform,opacity}',
+    '.mini-row .logo.drop{--drop:-120px;animation-duration:1.7s}',
+    '@keyframes hubLogoDrop{'
+    +'0%{opacity:0;transform:perspective(700px) translate3d(0,var(--drop,-230px),0) rotateY(0deg) rotateZ(-28deg) scale(.4);animation-timing-function:cubic-bezier(.55,0,.9,.4)}'
+    +'34%{opacity:1;transform:perspective(700px) translate3d(0,0,0) rotateY(360deg) rotateZ(0deg) scale(.96);animation-timing-function:cubic-bezier(.2,.7,.3,1)}'
+    +'48%{opacity:1;transform:perspective(700px) translate3d(0,-26px,120px) rotateY(540deg) rotateZ(0deg) scale(1.04);animation-timing-function:ease-in}'
+    +'62%{opacity:1;transform:perspective(700px) translate3d(0,0,190px) rotateY(720deg) rotateZ(0deg) scale(1.06);animation-timing-function:ease-in-out}'
+    +'76%{opacity:1;transform:perspective(700px) translate3d(0,0,190px) rotateY(720deg) rotateZ(0deg) scale(1.06);animation-timing-function:ease-out}'
+    +'100%{opacity:1;transform:perspective(700px) translate3d(0,0,0) rotateY(720deg) rotateZ(0deg) scale(1)}'
+    +'}',
     '.mono{font:700 32px "Space Grotesk","Hind Siliguri",sans-serif;color:#06130B}',
     '.here{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:#22FF88;color:#06130B}',
     '.bottom{display:flex;flex-direction:column;gap:5px}',
@@ -1584,7 +1955,7 @@
     <div class="hero-meta">
       <div class="hero-stat">
         <div class="hero-stat-label">বিভাগ</div>
-        <div class="hero-stat-value">৭টি বিষয়</div>
+        <div class="hero-stat-value">৯টি বিষয়</div>
       </div>
       <div class="hero-stat">
         <div class="hero-stat-label">সূরা</div>
@@ -1612,12 +1983,15 @@
         <button class="q-box" type="button" data-cat="english">ইংরেজি অ্যালফাবেট</button>
         <button class="q-box" type="button" data-cat="arabic">আরবি হরফ</button>
         <button class="q-box" type="button" data-cat="surah">আরবি সূরা</button>
+        <button class="q-box" type="button" data-cat="bnrhyme">বাংলা ছড়া</button>
+        <button class="q-box" type="button" data-cat="enrhyme">ইংরেজি ছড়া</button>
       </div>
       <button class="slide-nav-btn" id="slideStripRightBtn" type="button" aria-label="ডানে স্লাইড করুন">›</button>
     </div>
 
     <div class="section-bar">
       <span id="currentSectionTitle">স্বরবর্ণ (অ - ঔ)</span>
+      <button type="button" class="offline-chip" id="offlineChip" hidden></button>
       <span id="voiceEngineStatus">ভয়েস ইঞ্জিন প্রস্তুত — যেকোনো কার্ডে ট্যাপ করুন</span>
     </div>
 
@@ -1653,7 +2027,7 @@
       <div class="modal-content-pane" id="modalContentPane">
         <div class="modal-glyph-row" id="modalGlyphRow">
           <div class="modal-glyph" id="modalGlyph">অ</div>
-          <div class="modal-emoji" id="modalEmoji" aria-hidden="true"></div>
+          <div class="modal-emoji" id="modalEmoji" aria-hidden="true"><span class="em-in"></span></div>
         </div>
         <div class="modal-example" id="modalExample">
           <span class="modal-headline" id="modalHeadline">অ-তে অজগর</span>
@@ -2044,6 +2418,119 @@
     }
   ];
 
+  /* ===== ছড়া: ছোটদের জন্য (লাইন ধরে ধরে বাজে, নিজের ভয়েসও রেকর্ড করা যায়) ===== */
+  const mkRhyme = (id, glyph, title, lines, lang, meaning) => ({
+    id, glyph, title, headline: title, lines,
+    subline: lines.join("\n"), example: lines[0] + " …", meaning,
+    speakText: lines.join(" "), lang
+  });
+
+  const BN_RHYMES = [
+    mkRhyme("bnr-1", "🌙", "আয় আয় চাঁদ মামা", [
+      "আয় আয় চাঁদ মামা, টিপ দিয়ে যা,",
+      "চাঁদের কপালে চাঁদ টিপ দিয়ে যা।",
+      "ধান ভানলে কুঁড়ো দেব, মাছ কাটলে মুড়ো দেব,",
+      "কালো গরুর দুধ দেব, দুধ খাওয়ার বাটি দেব,",
+      "চাঁদের কপালে চাঁদ টিপ দিয়ে যা।"
+    ], "bn-BD", "লোকছড়া • বাংলা ছড়া"),
+    mkRhyme("bnr-2", "🦜", "আতা গাছে তোতা পাখি", [
+      "আতা গাছে তোতা পাখি,",
+      "ডালিম গাছে মউ,",
+      "এত ডাকি তবু কেন",
+      "কথা কয় না বউ।"
+    ], "bn-BD", "লোকছড়া • বাংলা ছড়া"),
+    mkRhyme("bnr-3", "😴", "ঘুম পাড়ানি মাসি-পিসি", [
+      "ঘুম পাড়ানি মাসি-পিসি আমাদের বাড়ি এসো,",
+      "খাট নাই পালং নাই খোকার চোখে বসো।",
+      "বাটা ভরে পান দেব গাল ভরে খেয়ো,",
+      "খোকার চোখে ঘুম নাই ঘুম দিয়ে যেয়ো।"
+    ], "bn-BD", "ঘুমপাড়ানি ছড়া • বাংলা ছড়া"),
+    mkRhyme("bnr-4", "🥭", "মিষ্টি আম", [
+      "গাছে গাছে আম ঝোলে,",
+      "হলুদ রোদে মন দোলে।",
+      "পাকা আমের মিষ্টি ঘ্রাণ,",
+      "খোকা-খুকুর নাচে প্রাণ।"
+    ], "bn-BD", "নতুন ছড়া • বাংলা ছড়া"),
+    mkRhyme("bnr-5", "🐟", "ছোট্ট মাছ", [
+      "ছোট্ট মাছ নদীর জলে,",
+      "সাঁতার কাটে দলে দলে।",
+      "লেজটি নেড়ে হাসে ভারি,",
+      "চলে যায় সে তাড়াতাড়ি।"
+    ], "bn-BD", "নতুন ছড়া • বাংলা ছড়া"),
+    mkRhyme("bnr-6", "☔", "ঝমঝম বৃষ্টি", [
+      "ঝমঝমাঝম বৃষ্টি এল,",
+      "ছাতা মাথায় খোকন চলল।",
+      "ব্যাঙ ডাকে ওই ঘ্যাঙর ঘ্যাং,",
+      "বৃষ্টি নাচে ধিন তা ধাং।"
+    ], "bn-BD", "নতুন ছড়া • বাংলা ছড়া"),
+    mkRhyme("bnr-7", "🐘", "হাতি মামা", [
+      "হাতি মামা হেলেদুলে,",
+      "চলে যায় নদীর কূলে।",
+      "লম্বা শুঁড়ে জল তুলে,",
+      "ভিজিয়ে দেয় সবার চুলে।"
+    ], "bn-BD", "নতুন ছড়া • বাংলা ছড়া"),
+    mkRhyme("bnr-8", "⭐", "ঝিকিমিকি তারা", [
+      "ঝিকিমিকি তারা জ্বলে,",
+      "রাত নেমেছে গাছের তলে।",
+      "চাঁদ মামা হাসে ওই,",
+      "ঘুম পাড়ানি গান গাই।"
+    ], "bn-BD", "নতুন ছড়া • বাংলা ছড়া")
+  ];
+
+  const EN_RHYMES = [
+    mkRhyme("enr-1", "⭐", "Twinkle, Twinkle, Little Star", [
+      "Twinkle, twinkle, little star,",
+      "How I wonder what you are!",
+      "Up above the world so high,",
+      "Like a diamond in the sky.",
+      "Twinkle, twinkle, little star,",
+      "How I wonder what you are!"
+    ], "en-US", "English Rhyme"),
+    mkRhyme("enr-2", "🥚", "Humpty Dumpty", [
+      "Humpty Dumpty sat on a wall,",
+      "Humpty Dumpty had a great fall.",
+      "All the king's horses and all the king's men",
+      "Couldn't put Humpty together again."
+    ], "en-US", "English Rhyme"),
+    mkRhyme("enr-3", "🐑", "Baa, Baa, Black Sheep", [
+      "Baa, baa, black sheep, have you any wool?",
+      "Yes sir, yes sir, three bags full.",
+      "One for the master, one for the dame,",
+      "And one for the little boy who lives down the lane."
+    ], "en-US", "English Rhyme"),
+    mkRhyme("enr-4", "⛰️", "Jack and Jill", [
+      "Jack and Jill went up the hill",
+      "To fetch a pail of water.",
+      "Jack fell down and broke his crown,",
+      "And Jill came tumbling after."
+    ], "en-US", "English Rhyme"),
+    mkRhyme("enr-5", "🚣", "Row, Row, Row Your Boat", [
+      "Row, row, row your boat,",
+      "Gently down the stream.",
+      "Merrily, merrily, merrily, merrily,",
+      "Life is but a dream."
+    ], "en-US", "English Rhyme"),
+    mkRhyme("enr-6", "🐭", "Hickory Dickory Dock", [
+      "Hickory, dickory, dock,",
+      "The mouse ran up the clock.",
+      "The clock struck one,",
+      "The mouse ran down,",
+      "Hickory, dickory, dock."
+    ], "en-US", "English Rhyme"),
+    mkRhyme("enr-7", "🐑", "Mary Had a Little Lamb", [
+      "Mary had a little lamb,",
+      "Its fleece was white as snow;",
+      "And everywhere that Mary went",
+      "The lamb was sure to go."
+    ], "en-US", "English Rhyme"),
+    mkRhyme("enr-8", "🕷️", "The Itsy Bitsy Spider", [
+      "The itsy bitsy spider climbed up the water spout.",
+      "Down came the rain and washed the spider out.",
+      "Out came the sun and dried up all the rain,",
+      "And the itsy bitsy spider climbed up the spout again."
+    ], "en-US", "English Rhyme")
+  ];
+
   const ALL_DATA = {
     soroborno: { title: "স্বরবর্ণ (অ - ঔ)", items: SOROBORNO },
     banjonborno: { title: "ব্যঞ্জনবর্ণ (ক - ঁ)", items: BANJONBORNO },
@@ -2051,7 +2538,9 @@
     namta: { title: "নামতা (১ থেকে ২০-এর ঘর)", items: NAMTA },
     english: { title: "ইংরেজি অ্যালফাবেট (A - Z)", items: ENGLISH },
     arabic: { title: "আরবি হরফ (ا - ي)", items: ARABIC },
-    surah: { title: "কোরআনের সূরা (সূরা ফাতিহা ও শেষ ১০ সূরা)", items: SURAHS }
+    surah: { title: "কোরআনের সূরা (সূরা ফাতিহা ও শেষ ১০ সূরা)", items: SURAHS },
+    bnrhyme: { title: "বাংলা ছড়া (ছোটদের জন্য)", items: BN_RHYMES },
+    enrhyme: { title: "ইংরেজি ছড়া — English Rhymes (ছোটদের জন্য)", items: EN_RHYMES }
   };
 
   const DB_NAME = "KidsVoiceAppDB";
@@ -2196,10 +2685,15 @@
   let queueItems = [];
   let queueIndex = 0;
   let cachedVoices = [];
+  let lastVoiceCount = -1;
 
   function refreshVoices() {
     if ("speechSynthesis" in window && window.speechSynthesis.getVoices) {
       cachedVoices = window.speechSynthesis.getVoices() || [];
+    }
+    if (cachedVoices.length !== lastVoiceCount) {
+      lastVoiceCount = cachedVoices.length;
+      try { window.dispatchEvent(new Event("kid-voices")); } catch {}
     }
   }
 
@@ -2208,14 +2702,31 @@
     window.speechSynthesis.onvoiceschanged = refreshVoices;
   }
 
+  function normLang(l) { return String(l || "").toLowerCase().replace("_", "-"); }
+
+  // অফলাইনে চলার মতো (localService) ভয়েসকে অগ্রাধিকার দেয়। না থাকলে শুধু অনলাইনে নেটওয়ার্ক ভয়েস।
   function pickBestNativeVoice(langCode) {
     if (!cachedVoices.length) refreshVoices();
-    const prefix = (langCode || "bn-BD").split("-")[0].toLowerCase();
-    const exact = cachedVoices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase());
-    if (exact) return exact;
-    const langMatch = cachedVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix));
-    if (langMatch) return langMatch;
-    return null;
+    const lc = normLang(langCode || "bn-BD");
+    const prefix = lc.split("-")[0];
+    const exact = cachedVoices.filter(v => normLang(v.lang) === lc);
+    const same = cachedVoices.filter(v => normLang(v.lang).startsWith(prefix));
+    const local = exact.find(v => v.localService) || same.find(v => v.localService);
+    if (local) return local;
+    if (!navigator.onLine) return null;
+    return exact[0] || same[0] || null;
+  }
+
+  const LANG_NAME_BN = { bn: "বাংলা", ar: "আরবি", en: "ইংরেজি" };
+  function notifyVoiceMissing(lang) {
+    const name = LANG_NAME_BN[normLang(lang).split("-")[0]] || "এই ভাষার";
+    const msg = "ইন্টারনেট নেই, আর এই ফোনে " + name + " অফলাইন ভয়েস নেই — স্লাইড বারের নিচের হলুদ ⚠ চিপে চাপ দিয়ে সমাধান দেখুন";
+    try { document.getElementById("playerStatusText").textContent = msg; } catch {}
+    try {
+      const modalOpen = document.getElementById("detailModal").classList.contains("open");
+      if (modalOpen) document.getElementById("recStatusText").textContent = msg;
+    } catch {}
+    try { window.dispatchEvent(new Event("kid-voice-missing")); } catch {}
   }
 
   function speakNativeContinuous(text, lang = "bn-BD", timeoutMs = 9500) {
@@ -2229,6 +2740,11 @@
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = lang;
         const chosenVoice = pickBestNativeVoice(lang);
+        if (!chosenVoice && !navigator.onLine && cachedVoices.length) {
+          notifyVoiceMissing(lang);
+          resolve();
+          return;
+        }
         if (chosenVoice) utter.voice = chosenVoice;
         utter.rate = lang.startsWith("ar") ? 0.85 : 0.9;
         utter.pitch = 1.0;
@@ -2250,6 +2766,17 @@
       }
     });
   }
+
+  function voiceReport() {
+    const out = {};
+    [["bn", "বাংলা", "bn-BD"], ["ar", "আরবি", "ar-SA"], ["en", "ইংরেজি", "en-US"]].forEach(([k, name, lang]) => {
+      const pool = cachedVoices.filter(v => normLang(v.lang).startsWith(k));
+      out[k] = { name, lang, state: pool.some(v => v.localService) ? "local" : (pool.length ? "network" : "none") };
+    });
+    out.total = cachedVoices.length;
+    return out;
+  }
+  window.__kidVoice = { report: voiceReport, speak: (t, l) => speakNativeContinuous(t, l, 6000) };
 
   function playBlobAudio(blob) {
     return new Promise((resolve) => {
@@ -2329,8 +2856,25 @@
     // 3) ডিভাইসের ভয়েস (শেষ ভরসা)
     const phrase = item.speakText || item.example || item.title;
     const lang = item.lang || "bn-BD";
+    if (Array.isArray(item.lines) && item.lines.length) {
+      for (let li = 0; li < item.lines.length; li++) {
+        if (token !== playbackToken) { setRhymeLine(item.id, -1); return; }
+        setRhymeLine(item.id, li);
+        await speakNativeContinuous(item.lines[li], lang, 9000);
+        await new Promise(r => setTimeout(r, 160));
+      }
+      setRhymeLine(item.id, -1);
+      return;
+    }
     const timeout = lang.startsWith("ar") ? 14000 : 6500;
     await speakNativeContinuous(phrase, lang, timeout);
+  }
+
+  function setRhymeLine(id, idx) {
+    if (!activeModalItem || activeModalItem.id !== id) return;
+    document.querySelectorAll("#modalSubline .rhyme-line").forEach((el, k) => {
+      el.classList.toggle("reading-active", k === idx);
+    });
   }
 
   function highlightCard(id) {
@@ -2547,16 +3091,23 @@
     else if (direction === "prev") pane.classList.add("slide-in-left");
 
     const glyphEl = document.getElementById("modalGlyph");
-    glyphEl.textContent = item.glyph;
+    const isRhyme = currentCategory === "bnrhyme" || currentCategory === "enrhyme";
+    glyphEl.textContent = isRhyme ? "" : item.glyph;
     glyphEl.classList.toggle("arabic-mode", currentCategory === "arabic" || currentCategory === "surah");
+    glyphEl.classList.remove("pop");
+    void glyphEl.offsetWidth;
+    glyphEl.classList.add("pop");
     const emojiEl = document.getElementById("modalEmoji");
-    const emojiChar = (window.__kidEmoji && window.__kidEmoji(item.id)) || "";
-    emojiEl.textContent = emojiChar;
+    let emojiChar = (window.__kidEmoji && window.__kidEmoji(item.id)) || "";
+    if (isRhyme && !emojiChar) emojiChar = item.glyph;
+    if (window.__kidEmojiShow) window.__kidEmojiShow(emojiEl, emojiChar);
+    else emojiEl.textContent = emojiChar;
     document.getElementById("modalGlyphRow").classList.toggle("has-emoji", !!emojiChar);
 
     const modalCardEl = document.getElementById("modalCardBox");
     const isSurahView = currentCategory === "surah" && Array.isArray(item.verses) && item.verses.length > 0;
     modalCardEl.classList.toggle("surah-fullscreen-mode", isSurahView);
+    modalCardEl.classList.toggle("rhyme-mode", isRhyme);
     pane.classList.toggle("surah-wide-pane", isSurahView);
 
     const rawHeadline = String(item.headline || item.title || "");
@@ -2573,9 +3124,15 @@
     const sublineEl = document.getElementById("modalSubline");
     const subText = String(item.subline || "");
     sublineEl.classList.toggle("namta-single-line", currentCategory === "namta");
-    sublineEl.textContent = currentCategory === "namta"
-      ? subText.replace(/\s*সমান\s*/g, " সমান সমান ")
-      : subText;
+    if (isRhyme && Array.isArray(item.lines)) {
+      sublineEl.innerHTML = item.lines.map((l, i) =>
+        `<span class="rhyme-line" data-i="${i}">${String(l).replace(/&/g, "&amp;").replace(/</g, "&lt;")}</span>`
+      ).join("");
+    } else {
+      sublineEl.textContent = currentCategory === "namta"
+        ? subText.replace(/\s*সমান\s*/g, " সমান সমান ")
+        : subText;
+    }
 
     const versesList = document.getElementById("modalVersesList");
     if (isSurahView) {
@@ -2872,7 +3429,9 @@ if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
     "eng-7":["🐐"],"eng-8":["🎩"],"eng-9":["🍦"],"eng-10":["🏺"],"eng-11":["🪁","🎈"],"eng-12":["🦁"],
     "eng-13":["🥭"],"eng-14":["🪺","🥚"],"eng-15":["🍊"],"eng-16":["🖊️","✏️"],"eng-17":["👸"],
     "eng-18":["🐰"],"eng-19":["☀️","🌞"],"eng-20":["🐯"],"eng-21":["☔"],"eng-22":["🚐"],
-    "eng-23":["⌚"],"eng-25":["🐃"],"eng-26":["🦓"]
+    "eng-23":["⌚"],"eng-25":["🐃"],"eng-26":["🦓"],
+    "bnr-1":["🌙"],"bnr-2":["🦜"],"bnr-3":["😴"],"bnr-4":["🥭"],"bnr-5":["🐟"],"bnr-6":["☔"],"bnr-7":["🐘"],"bnr-8":["⭐"],
+    "enr-1":["⭐"],"enr-2":["🥚"],"enr-3":["🐑"],"enr-4":["⛰️"],"enr-5":["🚣","🛶"],"enr-6":["🐭"],"enr-7":["🐑"],"enr-8":["🕷️"]
   };
   var cache = {};
   function colored(ch) {
@@ -2892,11 +3451,164 @@ if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
     var list = MAP[id]; if (!list) return "";
     for (var i = 0; i < list.length; i++) {
       var ch = list[i];
+      var cp = ch.codePointAt(0);
+      // শুধু একদম নতুন ইমোজি (Unicode 12+) হলে ফোনে আছে কিনা যাচাই হয়
+      if (!(cp >= 0x1FA70 && cp <= 0x1FAFF)) return ch;
       if (cache[ch] === undefined) cache[ch] = colored(ch);
       if (cache[ch]) return ch;
     }
     return "";
   };
+
+  // কোন ছবি কেমনভাবে আসবে
+  var KINDS = {
+    slither: "🐍", fly: "🦅🐦🐤🦜🕊", hop: "🐸🐰🐐🐑", pounce: "🐱🐯🦁",
+    gallop: "🐎🦌🐆🐭🐶🦓", stomp: "🐘🐄🐂🐃🐻🐪", swim: "🐟🐋",
+    drop: "🥭🍎🍊🍋🥥⚽🍦🏺🎩", grow: "🌸🪷🌾⛰", rise: "🌅☀🌞🌙", write: "🖊✏",
+    flip: "📒📓📖", beat: "🥁🎉⌚🪕🎵", drive: "🚗🚐🛒", sail: "🚢🛶⛵🚣",
+    spin: "☔🌪💊🍽", roll: "🥔", walk: "🧔👩🤴👸", float: "🧘😴",
+    twinkle: "⭐", fall: "🥚", climb: "🕷", rain: "🌧"
+  };
+  var KIND = {};
+  Object.keys(KINDS).forEach(function (k) {
+    Array.from(KINDS[k]).forEach(function (c) { KIND[c] = k; });
+  });
+  function strip(ch) { return String(ch).replace(/\uFE0F/g, ""); }
+
+  window.__kidEmojiShow = function (el, ch) {
+    if (!el) return;
+    var inner = el.querySelector(".em-in");
+    if (!inner) {
+      inner = document.createElement("span");
+      inner.className = "em-in";
+      el.textContent = "";
+      el.appendChild(inner);
+    }
+    inner.textContent = ch || "";
+    el.setAttribute("data-ch", ch || "");
+    el.className = "modal-emoji";
+    void el.offsetWidth;
+    if (ch) el.classList.add("mo-" + (KIND[strip(ch)] || "pop"));
+  };
+  // ছবিতে ট্যাপ করলে মোশন আবার চলে
+  document.addEventListener("click", function (e) {
+    var el = e.target && e.target.closest ? e.target.closest("#modalEmoji") : null;
+    if (el && el.getAttribute("data-ch")) window.__kidEmojiShow(el, el.getAttribute("data-ch"));
+  });
+})();
+</script>
+<script>
+(function () {
+  var chip = document.getElementById("offlineChip");
+  if (!chip) return;
+  var dlgEl = null;
+
+  function report() { return (window.__kidVoice && window.__kidVoice.report()) || null; }
+
+  function renderChip() {
+    var r = report();
+    if (!r || !("speechSynthesis" in window) || !r.total) { chip.hidden = true; return; }
+    var miss = [];
+    ["bn", "ar", "en"].forEach(function (k) { if (r[k].state !== "local") miss.push(r[k].name); });
+    chip.hidden = false;
+    if (miss.length) {
+      chip.className = "offline-chip warn";
+      chip.textContent = "⚠ অফলাইন ভয়েস নেই: " + miss.join(", ");
+    } else {
+      chip.className = "offline-chip";
+      chip.textContent = "✅ অফলাইনে সাউন্ড প্রস্তুত";
+    }
+  }
+
+  function stateText(st) {
+    if (st === "local") return "✅ অফলাইন ভয়েস আছে";
+    if (st === "network") return "⚠ শুধু অনলাইন ভয়েস আছে";
+    return "❌ কোনো ভয়েস নেই";
+  }
+
+  function pageState(cb) {
+    var proto = location.protocol;
+    if (proto === "file:" || proto === "content:") return cb("file");
+    if (!("serviceWorker" in navigator)) return cb("none");
+    navigator.serviceWorker.getRegistration().then(function (reg) {
+      cb(reg && reg.active ? "cached" : "pending");
+    }).catch(function () { cb("pending"); });
+  }
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text) e.textContent = text;
+    return e;
+  }
+
+  function openDialog() {
+    closeDialog();
+    var r = report() || {};
+    var back = el("div", "offline-dlg-backdrop");
+    var box = el("div", "offline-dlg");
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.appendChild(el("h2", "", "অফলাইনে সাউন্ড চালানোর ব্যবস্থা"));
+
+    box.appendChild(el("h3", "", "এই ফোনের ভয়েস এখন কেমন"));
+    [["bn", "অ আ ক খ"], ["ar", "ا ب ت ث"], ["en", "A B C D"]].forEach(function (x) {
+      var info = r[x[0]] || { name: x[0], state: "none", lang: "en-US" };
+      var row = el("div", "vrow");
+      var left = el("div");
+      left.appendChild(document.createTextNode(info.name + " "));
+      left.appendChild(el("span", "s", stateText(info.state)));
+      var btn = el("button", "", "🔊 শুনুন");
+      btn.type = "button";
+      btn.addEventListener("click", function () { if (window.__kidVoice) window.__kidVoice.speak(x[1], info.lang); });
+      row.appendChild(left); row.appendChild(btn);
+      box.appendChild(row);
+    });
+
+    box.appendChild(el("h3", "", "ভয়েস না থাকলে বা শুধু অনলাইন হলে (অ্যান্ড্রয়েড)"));
+    var ol = el("ol");
+    [
+      "ফোনে ইন্টারনেট চালু করুন।",
+      "Settings → Accessibility (অ্যাক্সেসিবিলিটি) → Text-to-speech output খুলুন। স্যামসাংয়ে এটি Settings → General management → Language → Text-to-speech। ফোনভেদে নাম একটু আলাদা হতে পারে।",
+      "গুগলের ইঞ্জিনের (Speech Recognition & Synthesis) পাশের ⚙ চাপুন, তারপর Install voice data।",
+      "Bengali (Bangladesh) ও Arabic বেছে ডাউনলোড করুন (ইংরেজি না থাকলে সেটাও)।",
+      "ডাউনলোড শেষে ব্রাউজার বন্ধ করে আবার খুলুন। এরপর ইন্টারনেট ছাড়াই সাউন্ড বাজবে।"
+    ].forEach(function (t) { ol.appendChild(el("li", "", t)); });
+    box.appendChild(ol);
+
+    box.appendChild(el("h3", "", "পেজটি অফলাইনে খুলবে কিনা"));
+    var pg = el("p", "", "যাচাই হচ্ছে…");
+    box.appendChild(pg);
+    pageState(function (st) {
+      pg.textContent = st === "cached" ? "✅ পেজটি এই ফোনে সংরক্ষিত আছে, ইন্টারনেট ছাড়াই খুলবে।"
+        : st === "pending" ? "⏳ একবার ইন্টারনেট চালু রেখে পেজটি পুরো খুললে ফোনে সংরক্ষিত হয়ে যাবে।"
+        : st === "file" ? "📄 এটি ফোনের ফাইল থেকে খোলা, তাই পেজ ইন্টারনেট ছাড়াই খোলে। শুধু সাউন্ডের জন্য উপরের ভয়েস লাগবে।"
+        : "এই ব্রাউজারে অফলাইন সংরক্ষণ সাপোর্ট নেই।";
+    });
+
+    var close = el("button", "close-dlg", "ঠিক আছে");
+    close.type = "button";
+    close.addEventListener("click", closeDialog);
+    box.appendChild(close);
+    back.appendChild(box);
+    back.addEventListener("click", function (e) { if (e.target === back) closeDialog(); });
+    document.body.appendChild(back);
+    dlgEl = back;
+  }
+  function closeDialog() { if (dlgEl && dlgEl.parentNode) dlgEl.parentNode.removeChild(dlgEl); dlgEl = null; }
+
+  chip.addEventListener("click", openDialog);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDialog(); });
+  window.addEventListener("kid-voices", renderChip);
+  window.addEventListener("online", renderChip);
+  window.addEventListener("offline", renderChip);
+  window.addEventListener("kid-voice-missing", function () {
+    renderChip();
+    chip.classList.remove("pulse"); void chip.offsetWidth; chip.classList.add("pulse");
+  });
+  renderChip();
+  setTimeout(renderChip, 800);
+  setTimeout(renderChip, 2500);
 })();
 </script>
 </body>

@@ -1,6 +1,6 @@
 /* Offline cache for the kids learning page.
    Cache-first: once visited online, everything works without internet. */
-const CACHE = "kids-learning-v4";
+const CACHE = "kids-learning-v7";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon.svg"];
 
 self.addEventListener("install", (e) => {
